@@ -14,7 +14,11 @@ class ProductoController extends Controller
     public function listAll()
     {
         $productos = Producto::with(["categoria", "informacionNutricional"])->get();
-        return response()->json($productos);
+        return response()->json($productos)
+        ->header('Content-Type', 'application/json')
+        ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
     }
 
     /**
