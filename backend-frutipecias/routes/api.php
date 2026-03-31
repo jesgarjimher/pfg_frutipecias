@@ -15,4 +15,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductoController;
 
-Route::get('/productos', [ProductoController::class, 'listAll']);
+Route::get("/productos", [ProductoController::class, "listAll"]);
+
+Route::delete("/productos/{id}", [ProductoController::class, "destroy"]);

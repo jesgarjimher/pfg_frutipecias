@@ -50,6 +50,14 @@ class ProductoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $producto = Producto::find($id);
+
+        if(!$producto) {
+            return response()->json(["message" => "No se ha podido encontrar el producto"], 404);
+        }
+
+        $producto->delete();
+
+        return response()->json(["message" => "Producto con ID {$id} eliminado"], 200);
     }
 }
