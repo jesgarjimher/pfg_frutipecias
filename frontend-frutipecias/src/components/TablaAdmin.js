@@ -19,9 +19,23 @@ function TablaAdmin() {
             alert(msg);
         }
 
+        
 
        
     } 
+    const deleteProducto = async (id) => {
+            if(window.confirm(`Eliminar producto con ${id}???`)) {
+                try {
+                    await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`);
+
+                    setProductos(productos.filter(productosLista => productosLista.id !== id));
+                }catch(error) {
+                    alert("error al eliminar producto");
+                    console.error("Error detallado:", error);
+                }
+            }
+        }
+
     useEffect(() => {
         getProductos();
     }, []);
@@ -45,7 +59,7 @@ function TablaAdmin() {
                         <td>{producto.id}</td>
                         <td>{producto.nombre}</td>
                         <td>{producto.categoria.nombre}</td>
-                        <td>{producto.nombre}</td>
+                        <td><button onClick={() => deleteProducto(producto.id)}>Eliminar</button></td>
                     </tr>
                             
                     )}
