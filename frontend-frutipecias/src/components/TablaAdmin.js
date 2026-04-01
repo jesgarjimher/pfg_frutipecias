@@ -59,7 +59,10 @@ function TablaAdmin() {
                         <td>{producto.id}</td>
                         <td>{producto.nombre}</td>
                         <td>{producto.categoria.nombre}</td>
-                        <td><button onClick={() => deleteProducto(producto.id)}>Eliminar</button></td>
+                        <td>
+                            <button onClick={() => deleteProducto(producto.id)}>Eliminar</button>
+                            <a>Editar</a>
+                        </td>
                     </tr>
                             
                     )}

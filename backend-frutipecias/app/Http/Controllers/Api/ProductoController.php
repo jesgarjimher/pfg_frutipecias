@@ -29,9 +29,13 @@ class ProductoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
+    public function getProduct($id) {
+        $producto = Producto::with(["categoria","informacionNutricional","alergenos"])->find($id);
+
+        if(!$producto) {
+            return response()->json(["message" => "Producto no encontrado"], 404);
+        }
+        return response()->json($producto);
     }
 
     /**
