@@ -13,4 +13,8 @@ class Producto extends Model
     public function informacionNutricional() {
         return $this->hasOne(InformacionNutricional::class);
     }
+
+    public function alergenos() {
+        return $this->belongsToMany(Alergeno::class);
+    }
 }
