@@ -5,6 +5,7 @@ import Productos from './components/Productos';
 import Home from './components/Home';
 import TablaAdmin from './components/TablaAdmin';
 import FormEdit from './components/FormEdit';
+import AltaProducto from './components/AltaProducto';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
 
           <Route path="/tabla-admin" element={<TablaAdmin />} />
           <Route path="/form-edit/:id" element={<FormEdit />} />
+          <Route path="/alta-producto" element={<AltaProducto />} />
         </Routes>
       </Router>
   );

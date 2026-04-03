@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 
 function TablaAdmin() {
@@ -61,7 +62,7 @@ function TablaAdmin() {
                         <td>{producto.categoria.nombre}</td>
                         <td>
                             <button onClick={() => deleteProducto(producto.id)}>Eliminar</button>
-                            <a>Editar</a>
+                            <Link to={`/form-edit/${producto.id}`}>Editar</Link>
                         </td>
                     </tr>
                             
