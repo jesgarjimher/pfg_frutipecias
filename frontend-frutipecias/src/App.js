@@ -6,10 +6,12 @@ import Home from './components/Home';
 import TablaAdmin from './components/TablaAdmin';
 import FormEdit from './components/FormEdit';
 import AltaProducto from './components/AltaProducto';
+import NavBar from './components/common/NavBar';
 
 function App() {
   return (
       <Router>
+        <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/productos/:categoria" element={<Productos />} />
