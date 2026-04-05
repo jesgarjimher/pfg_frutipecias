@@ -25,3 +25,4 @@ Route::get("/alergenos", [AlergenoController::class, "getAlergenos"]);
 
 Route::get("/categorias", [CategoriaController::class, "list"]);
 Route::put("/productos/{id}", [ProductoController::class, "update"]);
+Route::post("/productos", [ProductoController::class, "createProducto"]);

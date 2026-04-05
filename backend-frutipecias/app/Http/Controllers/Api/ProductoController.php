@@ -24,9 +24,48 @@ class ProductoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function createProducto(Request $request)
     {
-        //
+        $request->validate([
+            "nombre"=>"required|string|max:255",
+            "categoria_id" => "required|exists:categorias,id",
+            "nutriscore" => "required|string|max:1"
+        ]);
+
+        DB::beginTransaction();
+
+        try{
+           $producto = Producto::create([
+            "nombre" => $request->nombre,
+            "descripcion" => $request->descripcion,
+            "ingredientes" => $request->ingredientes,
+            "nutriscore" => $request->nutriscore,
+            "categoria_id" => $request->categoria_id,
+           ]);
+
+           //crea relacion informacion_nutricional con relaicon hasOne
+           if($request->has("informacion_nutricional")) {
+            $producto->informacionNutricional()->create($request->input("informacion_nutricional"));
+           }
+
+           //
+           if($request->has("alergenos") && is_array($request->input("alergenos"))) {
+                $producto->alergenos()->attach($request->input("alergenos"));
+           }
+
+           DB::commit();
+
+           return response()->json([
+            "message" => "Producto creado",
+            "id" => $producto->id
+           ], 201);
+        }catch(\Exception $error) {
+            DB::rollBack();
+            return response()->json([
+                "message" => "Se ha producido un error al crear el producto",
+                "error" => $error->getMessage()
+            ], 500);
+        }
     }
 
     /**
