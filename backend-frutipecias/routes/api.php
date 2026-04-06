@@ -13,6 +13,7 @@
 
 
 use App\Http\Controllers\Api\AlergenoController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductoController;
@@ -26,3 +27,4 @@ Route::get("/alergenos", [AlergenoController::class, "getAlergenos"]);
 Route::get("/categorias", [CategoriaController::class, "list"]);
 Route::put("/productos/{id}", [ProductoController::class, "update"]);
 Route::post("/productos", [ProductoController::class, "createProducto"]);
+Route::post("/login", [AuthController::class, "login"]);
