@@ -20,11 +20,17 @@ use App\Http\Controllers\Api\ProductoController;
 
 Route::get("/productos", [ProductoController::class, "listAll"]);
 
-Route::delete("/productos/{id}", [ProductoController::class, "destroy"]);
 Route::get("/productos/{id}", [ProductoController::class, "getProduct"]);
 Route::get("/alergenos", [AlergenoController::class, "getAlergenos"]);
 
 Route::get("/categorias", [CategoriaController::class, "list"]);
-Route::put("/productos/{id}", [ProductoController::class, "update"]);
-Route::post("/productos", [ProductoController::class, "createProducto"]);
 Route::post("/login", [AuthController::class, "login"]);
+
+Route::middleware("auth:sanctum")->group(function() {
+    Route::put("/productos/{id}", [ProductoController::class, "update"]);
+    Route::post("/productos", [ProductoController::class, "createProducto"]);
+    
+    Route::delete("/productos/{id}", [ProductoController::class, "destroy"]);
+
+});
+

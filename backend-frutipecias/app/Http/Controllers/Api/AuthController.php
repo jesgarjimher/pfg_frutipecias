@@ -13,7 +13,8 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials)) {
             $user = Auth::user();
-            return response()->json([ "message" => "Login exitoso", "user" => $user], 200);
+            $token = $user->createToken("token-admin")->plainTextToken;
+            return response()->json([ "message" => "Login exitoso", "user" => $user, "access_token" => $token, "token_type" => "Bearer"], 200);
         }
 
         return response()->json(["message" => "Email o contrasena incorrectas"], 401);
