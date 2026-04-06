@@ -9,14 +9,15 @@ import AltaProducto from './components/AltaProducto';
 import NavBar from './components/common/NavBar';
 import Login from './components/Login';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import { useState } from 'react';
 
 
 function App() {
-  const user = { loggedIn: true, role: 'admin' }; 
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const isAdmin = user.loggedIn && user.role === 'admin';
   return (
       <Router>
-        <NavBar />
+        <NavBar user={user} setUser={setUser}/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/productos/:categoria" element={<Productos />} />
@@ -26,7 +27,7 @@ function App() {
             <Route path="/form-edit/:id" element={<FormEdit />} />
             <Route path="/alta-producto" element={<AltaProducto />} />
           </Route>
-          <Route path="/login" element={<Login/>} />
+          <Route path="/login" element={<Login setUser={setUser}/>} />
 
         </Routes>
       </Router>

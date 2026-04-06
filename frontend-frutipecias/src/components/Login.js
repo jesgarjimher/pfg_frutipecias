@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login({setUser}) {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
 
@@ -17,13 +17,18 @@ function Login() {
         event.preventDefault();
         try {
             const response = await axios.post("http://127.0.0.1:8000/api/login", credentials);
-            
-            // Guardamos el nombre del usuario en localStorage para saber que está logueado
+            const userData = response.data.user;
+            const token = response.data.access_token;
+            //guardar usuario en LocalStorage
             localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("token", token)
+
+            setUser(userData);
             
             alert("Usuario logueado " + response.data.user.name);
             navigate("/tabla-admin");
         } catch(errror) {
+            console.error("Error en login:", error.response?.data || error.message);
             setError("Email o contrasena incorrectos");
         }
     };
