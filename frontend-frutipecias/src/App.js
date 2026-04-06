@@ -7,6 +7,7 @@ import TablaAdmin from './components/TablaAdmin';
 import FormEdit from './components/FormEdit';
 import AltaProducto from './components/AltaProducto';
 import NavBar from './components/common/NavBar';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/tabla-admin" element={<TablaAdmin />} />
           <Route path="/form-edit/:id" element={<FormEdit />} />
           <Route path="/alta-producto" element={<AltaProducto />} />
+          <Route path="/login" element={<Login/>} />
         </Routes>
       </Router>
   );
