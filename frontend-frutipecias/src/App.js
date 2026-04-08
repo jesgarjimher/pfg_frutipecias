@@ -10,6 +10,7 @@ import NavBar from './components/common/NavBar';
 import Login from './components/Login';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { useState } from 'react';
+import AboutUs from './components/AboutUs';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           </Route>
           <Route path="/login" element={<Login setUser={setUser}/>} />
 
+          <Route path="/sobre-nosotros" element={<AboutUs />} />
         </Routes>
       </Router>
   );
