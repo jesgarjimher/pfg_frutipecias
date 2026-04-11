@@ -29,7 +29,7 @@ function Login({setUser}) {
             alert("Usuario logueado " + response.data.user.name);
             navigate("/tabla-admin");
 
-        } catch(errror) {
+        } catch(error) {
             console.error("Error en login:", error.response?.data || error.message);
             setError("Email o contrasena incorrectos");
         }

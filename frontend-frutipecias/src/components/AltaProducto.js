@@ -58,14 +58,24 @@ function AltaProducto() {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        const token = localStorage.getItem("token");
         try {
-            await axios.post("http://127.0.0.1:8000/api/productos", producto);
+            await axios.post("http://127.0.0.1:8000/api/productos", producto, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Accept": "application/json"
+                }
+            });
             alert("producto creado");
             navigate("/tabla-admin");
         }catch(error) {
             console.error("Error creando el producto",error);
-            alert("error al crear el producto")
+            alert("error al crear el producto");
+            if(error.response?.status === 401) {
+                alert("sesion caducada");
+                navigate("/login")
+            }
         }
     }
 

@@ -92,12 +92,22 @@ function FormEdit() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem("token");
         try {
-            await axios.put(`http://127.0.0.1:8000/api/productos/${id}`, producto);
+            await axios.put(`http://127.0.0.1:8000/api/productos/${id}`, producto, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Accept": "application/json"
+                }
+            });
             alert("Producto actualziado");
             navigate("/tabla-admin");
         }catch(error) {
-            console.error("Error actuzalando", error);
+            console.error("Error al actualizar", error);
+            if(error.response?.status === 401) {
+                alert("Tu sesion ha caducado");
+                navigate("/login");
+            }
         }
     }
 
