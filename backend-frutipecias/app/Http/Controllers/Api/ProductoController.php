@@ -16,7 +16,7 @@ class ProductoController extends Controller
      */
     public function listAll()
     {
-        $productos = Producto::with(["categoria", "informacionNutricional", "alergenos"])->get();
+        $productos = Producto::with(["categoria", "informacionNutricional", "alergenos"])->paginate(10);
         return response()->json($productos);
         
     }

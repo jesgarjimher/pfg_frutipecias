@@ -5,15 +5,19 @@ import {Link} from "react-router-dom";
 
 function TablaAdmin() {
     const [productos, setProductos] = useState([]);
+    const [paginacion, setPaginacion] = useState({});
+    const [pagina, setPagina] = useState(1);
 
-    const getProductos = async () => {
+    const getProductos = async (pagina = 1) => {
         try {
-            const res = await axios.get("http://127.0.0.1:8000/api/productos", {
+            const res = await axios.get(`http://127.0.0.1:8000/api/productos?pagina=${pagina}`, {
                 headers: {
                     "Accept": "application/json"
                 }
             });
-            setProductos(res.data);
+            setProductos(res.data.data);
+            setPaginacion(res.data);
+            setPagina(res.data.current_page);
         }catch(error) {
             console.error("Error detallado:", error);
             const msg = error.response?.data?.message || "Error de conexión o CORS";
