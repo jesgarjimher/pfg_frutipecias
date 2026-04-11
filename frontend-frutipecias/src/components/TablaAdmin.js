@@ -25,9 +25,16 @@ function TablaAdmin() {
        
     } 
     const deleteProducto = async (id) => {
+        const token = localStorage.getItem("token");
             if(window.confirm(`Eliminar producto con ${id}???`)) {
                 try {
-                    await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`);
+                    await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`,
+                        {headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Accept": "application/json"
+                        }
+
+                    });
 
                     setProductos(productos.filter(productosLista => productosLista.id !== id));
                 }catch(error) {
