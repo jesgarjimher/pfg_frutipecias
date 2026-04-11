@@ -15,7 +15,7 @@ import AboutUs from './components/AboutUs';
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  const isAdmin = user.loggedIn && user.role === 'admin';
+  const isAdmin = user && user.role === 'admin';
   return (
       <Router>
         <NavBar user={user} setUser={setUser}/>

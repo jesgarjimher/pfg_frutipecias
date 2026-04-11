@@ -17,16 +17,18 @@ function Login({setUser}) {
         event.preventDefault();
         try {
             const response = await axios.post("http://127.0.0.1:8000/api/login", credentials);
-            const userData = response.data.user;
+            const userData = {...response.data.user, loggedIn: true, role: "admin"};
             const token = response.data.access_token;
             //guardar usuario en LocalStorage
-            localStorage.setItem("user", JSON.stringify(response.data.user));
+            // localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("user", JSON.stringify(userData));
             localStorage.setItem("token", token)
 
             setUser(userData);
             
             alert("Usuario logueado " + response.data.user.name);
             navigate("/tabla-admin");
+
         } catch(errror) {
             console.error("Error en login:", error.response?.data || error.message);
             setError("Email o contrasena incorrectos");
