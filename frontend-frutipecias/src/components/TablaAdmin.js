@@ -7,10 +7,17 @@ function TablaAdmin() {
     const [productos, setProductos] = useState([]);
     const [paginacion, setPaginacion] = useState({});
     const [pagina, setPagina] = useState(1);
+    const botonesPaginacion = [];
+
+    for(let pag = 1; pag <= paginacion.last_page; pag++) {
+        botonesPaginacion.push(
+            <button key={pag} onClick={() => getProductos(pag)}>{pag}</button>
+        )
+    }
 
     const getProductos = async (pagina = 1) => {
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/api/productos?pagina=${pagina}`, {
+            const res = await axios.get(`http://127.0.0.1:8000/api/productos?page=${pagina}`, {
                 headers: {
                     "Accept": "application/json"
                 }
@@ -26,8 +33,10 @@ function TablaAdmin() {
 
         
 
-       
     } 
+
+
+
     const deleteProducto = async (id) => {
         const token = localStorage.getItem("token");
             if(window.confirm(`Eliminar producto con ${id}???`)) {
@@ -80,7 +89,11 @@ function TablaAdmin() {
                     )}
                 </tbody>
             </table>
-            
+            <div>
+                {botonesPaginacion}
+                
+
+            </div>
         </div>
     )
 }
