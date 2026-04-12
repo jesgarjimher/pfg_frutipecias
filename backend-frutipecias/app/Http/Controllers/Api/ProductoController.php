@@ -22,6 +22,12 @@ class ProductoController extends Controller
                 $q->where("nombre", $request->categoria);
             });
         }
+
+        if($request->has("search")) {
+            $busqueda = $request->search;
+            $query->where('nombre', 'LIKE', "%{$busqueda}");
+        }
+        
         $productos = $query->paginate(10);
         return response()->json($productos);
         

@@ -16,8 +16,8 @@ function NavBar() {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/about-us">Sobre nosotros</Nav.Link>
             <NavDropdown title="Productos" id="basic-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/productos/frutos-secos">Frutos secos</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/productos/frutas-deshidratadas">Frutas deshidratadas</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/productos/Frutos%20Secos">Frutos secos</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/productos/Fruta%20Deshidratada">Frutas deshidratadas</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/productos/especias">Especias</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item  as={Link} to="/productos">Todos</NavDropdown.Item>
