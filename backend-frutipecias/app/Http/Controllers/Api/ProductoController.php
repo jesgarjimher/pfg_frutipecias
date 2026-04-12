@@ -14,9 +14,15 @@ class ProductoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function listAll()
+    public function listAll(Request $request)
     {
-        $productos = Producto::with(["categoria", "informacionNutricional", "alergenos"])->paginate(10);
+        $query = Producto::with(["categoria", "informacionNutricional", "alergenos"]);
+        if($request->has("categoria")) {
+            $query->whereHas("categoria", function($q) use ($request) {
+                $q->where("nombre", $request->categoria);
+            });
+        }
+        $productos = $query->paginate(10);
         return response()->json($productos);
         
     }
