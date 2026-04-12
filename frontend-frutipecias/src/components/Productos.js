@@ -7,15 +7,25 @@ function Productos() {
     const [productos, setProductos] = useState([]);
     const {categoria} = useParams();
     const pathStorageImg = "http://127.0.0.1:8000/storage/";
+    const [pagina, setPagina] = useState(1);
+    const [paginacion, setPaginacion] = useState({});
+    const botonesPaginacion = [];
 
-    const getProductos = async () => {
+    for(let pag = 1; pag <= paginacion.last_page; pag++) {
+        botonesPaginacion.push(
+            <button key={pag} onClick={() => getProductos(pag)}>{pag}</button>
+        )
+    }
+    const getProductos = async (pagina = 1) => {
         try {
-            const res = await axios.get("http://127.0.0.1:8000/api/productos", {
+            const res = await axios.get(`http://127.0.0.1:8000/api/productos?page=${pagina}`, {
             headers: {
                 'Accept': 'application/json'
             }
         });
-            setProductos(res.data);
+            setProductos(res.data.data);
+            setPaginacion(res.data);
+            setPagina(res.data.current_page);
         }catch (error){
             console.error("Error detallado:", error);
             const msg = error.response?.data?.message || "Error de conexión o CORS";
@@ -40,6 +50,9 @@ function Productos() {
                 
 
             ))}
+            <div>
+                {botonesPaginacion}
+            </div>
         </div>
     )
 }
