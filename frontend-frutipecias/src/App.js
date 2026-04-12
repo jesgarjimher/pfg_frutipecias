@@ -22,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/productos/:categoria" element={<Productos />} />
+          <Route path="/productos" element={<Productos />} />
 
           <Route element={<ProtectedRoute isAdmin={isAdmin} />}>
             <Route path="/tabla-admin" element={<TablaAdmin />} />

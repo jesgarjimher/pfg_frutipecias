@@ -9,16 +9,15 @@ function Productos() {
     const pathStorageImg = "http://127.0.0.1:8000/storage/";
     const [pagina, setPagina] = useState(1);
     const [paginacion, setPaginacion] = useState({});
-    const botonesPaginacion = [];
-
-    for(let pag = 1; pag <= paginacion.last_page; pag++) {
-        botonesPaginacion.push(
-            <button key={pag} onClick={() => getProductos(pag)}>{pag}</button>
-        )
-    }
+    
     const getProductos = async (pagina = 1) => {
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/api/productos?page=${pagina}`, {
+            let url = `http://127.0.0.1:8000/api/productos?page=${pagina}`;
+
+            if(categoria) {
+                url += `&categoria=${categoria}`;
+            }
+            const res = await axios.get(url, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -34,15 +33,23 @@ function Productos() {
     }
 
     useEffect(() => {
-        getProductos();
-    }, []);
+        getProductos(1); //setear la pag 1 cada cambio de categoria
+    }, [categoria]);
+
+    const botonesPaginacion = [];
+
+    for(let pag = 1; pag <= paginacion.last_page; pag++) {
+        botonesPaginacion.push(
+            <button key={pag} onClick={() => getProductos(pag)}>{pag}</button>
+        )
+    }
 
     return (
         <div>
             <h1>{categoria}</h1>
-            {productos.map(producto => (
+            {productos.map((producto, index) => (
                 <div key={producto.id}>
-                    <p>{producto.nombre}</p>
+                    <p>{index+1}-{producto.nombre}</p>
                     <p>{producto.categoria.nombre}</p>
                     <p>{producto.nutriscore}</p>
                     <img src={pathStorageImg + producto.imagen} alt={producto.name}></img>
