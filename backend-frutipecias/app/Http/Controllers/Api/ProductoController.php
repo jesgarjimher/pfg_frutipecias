@@ -25,9 +25,9 @@ class ProductoController extends Controller
 
         if($request->has("search")) {
             $busqueda = $request->search;
-            $query->where('nombre', 'LIKE', "%{$busqueda}");
+            $query->where('nombre', 'LIKE', "%{$busqueda}%");
         }
-        
+
         $productos = $query->paginate(10);
         return response()->json($productos);
         

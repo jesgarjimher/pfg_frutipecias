@@ -38,7 +38,11 @@ function Productos() {
     }
 
     useEffect(() => {
-        getProductos(1); //setear la pag 1 cada cambio de categoria
+        const delayCall = setTimeout(() => {
+            getProductos(1); //setear la pag 1 cada cambio de categoria
+
+        },500)
+        return () => clearTimeout(delayCall); //limpa el timeout si se sigue escribiendo
     }, [categoria, busqueda]);
 
     const botonesPaginacion = [];
