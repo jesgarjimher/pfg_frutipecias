@@ -9,6 +9,7 @@ function Productos() {
     const pathStorageImg = "http://127.0.0.1:8000/storage/";
     const [pagina, setPagina] = useState(1);
     const [paginacion, setPaginacion] = useState({});
+    const [busqueda, setBusqueda] = useState("");
     
     const getProductos = async (pagina = 1) => {
         try {
@@ -16,6 +17,10 @@ function Productos() {
 
             if(categoria) {
                 url += `&categoria=${categoria}`;
+            }
+
+            if(busqueda) {
+                url += `&search=${busqueda}`;
             }
             const res = await axios.get(url, {
             headers: {
@@ -34,7 +39,7 @@ function Productos() {
 
     useEffect(() => {
         getProductos(1); //setear la pag 1 cada cambio de categoria
-    }, [categoria]);
+    }, [categoria, busqueda]);
 
     const botonesPaginacion = [];
 
@@ -46,6 +51,9 @@ function Productos() {
 
     return (
         <div>
+            <div>
+                <input type="text" placeholder="buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)}></input>
+            </div>
             <h1>{categoria}</h1>
             {productos.map((producto, index) => (
                 <div key={producto.id}>
