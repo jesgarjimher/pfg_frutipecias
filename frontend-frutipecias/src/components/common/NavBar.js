@@ -2,9 +2,17 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-function NavBar() {
+function NavBar({user, setUser}) {
+
+    const navigate = useNavigate();
+    const logOut = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        setUser(null);
+        navigate("/")
+    }
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -15,6 +23,13 @@ function NavBar() {
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/about-us">Sobre nosotros</Nav.Link>
+            {user ? (
+                <>
+                    <Nav.Link as={Link} to="/tabla-admin">Tabla admin</Nav.Link>
+                    <Nav.Link onClick={logOut}>Logout</Nav.Link>
+                </>)
+                : (<></>)
+            }
             <NavDropdown title="Productos" id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to="/productos/Frutos%20Secos">Frutos secos</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/productos/Fruta%20Deshidratada">Frutas deshidratadas</NavDropdown.Item>

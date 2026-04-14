@@ -31,7 +31,7 @@ function App() {
           </Route>
           <Route path="/login" element={<Login setUser={setUser}/>} />
 
-          <Route path="/sobre-nosotros" element={<AboutUs />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Routes>
       </Router>
   );
