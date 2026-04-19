@@ -55,7 +55,7 @@ function TablaAdmin() {
 
                     setProductos(productos.filter(productosLista => productosLista.id !== id));
                 }catch(error) {
-                    setMostrarErrorModal("error al eliminar producto");
+                    setMsgError(error.response?.data?.message || "error al eliminar producto");
                     setMostrarErrorModal(true);
                     console.error("Error detallado:", error);
                 }
@@ -125,19 +125,7 @@ function TablaAdmin() {
             </Modal.Footer>
         </Modal>
 
-        <Modal show={mostrarErrorModal} onHide={() => setMostrarErrorModal(false)} centered>
-            <Modal.Header closeButton className="bg-danger text-white">
-                <Modal.Title>Error de Operación</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <p>{msgError}</p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={() => setMostrarErrorModal(false)}>
-                    Entendido
-                </Button>
-            </Modal.Footer>
-        </Modal>
+        
         <Modal show={mostrarErrorModal} onHide={() => setMostrarErrorModal(false)}>
             <Modal.Header closeButton className="bg-danger text-white">
                 <Modal.Title>Error</Modal.Title>

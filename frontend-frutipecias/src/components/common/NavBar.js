@@ -26,6 +26,7 @@ function NavBar({user, setUser}) {
             {user ? (
                 <>
                     <Nav.Link as={Link} to="/tabla-admin">Tabla admin</Nav.Link>
+                    <Nav.Link as={Link} to="/alta-producto">Nuevo producto</Nav.Link>
                     <Nav.Link onClick={logOut}>Logout</Nav.Link>
                 </>)
                 : (<></>)
