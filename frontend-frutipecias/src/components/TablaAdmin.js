@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Button, Modal } from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
@@ -8,6 +9,8 @@ function TablaAdmin() {
     const [paginacion, setPaginacion] = useState({});
     const [pagina, setPagina] = useState(1);
     const botonesPaginacion = [];
+    const [borrarId, setBorrarId] = useState(null);
+    const [mostrarModal, setMostrarModal] = useState(false);
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
@@ -39,7 +42,6 @@ function TablaAdmin() {
 
     const deleteProducto = async (id) => {
         const token = localStorage.getItem("token");
-            if(window.confirm(`Eliminar producto con ${id}???`)) {
                 try {
                     await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`,
                         {headers: {
@@ -54,7 +56,21 @@ function TablaAdmin() {
                     alert("error al eliminar producto");
                     console.error("Error detallado:", error);
                 }
-            }
+            
+        }
+
+        const handleCerrar = () => {
+            setMostrarModal(false);
+        }
+
+        const handleMostrar = (id) => {
+            setBorrarId(id);
+            setMostrarModal(true);
+        }
+
+        const confirmDelete = () => {
+            deleteProducto(borrarId)
+            handleCerrar();
         }
 
     useEffect(() => {
@@ -81,7 +97,7 @@ function TablaAdmin() {
                         <td>{producto.nombre}</td>
                         <td>{producto.categoria.nombre}</td>
                         <td>
-                            <button onClick={() => deleteProducto(producto.id)}>Eliminar</button>
+                            <button onClick={() => handleMostrar(producto.id)}>Eliminar</button>
                             <Link to={`/form-edit/${producto.id}`}>Editar</Link>
                         </td>
                     </tr>
@@ -89,6 +105,22 @@ function TablaAdmin() {
                     )}
                 </tbody>
             </table>
+            <Modal show={mostrarModal} onHide={handleCerrar} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Confirmar eliminación</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                ¿Seguro que deseas borrar el producto con ID: {borrarId}? 
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={handleCerrar}>
+                    Cancelar
+                </Button>
+                <Button onClick={confirmDelete}>
+                    Eliminar Producto
+                </Button>
+            </Modal.Footer>
+        </Modal>
             <div>
                 {botonesPaginacion}
                 
