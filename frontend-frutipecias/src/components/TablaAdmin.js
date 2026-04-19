@@ -11,6 +11,8 @@ function TablaAdmin() {
     const botonesPaginacion = [];
     const [borrarId, setBorrarId] = useState(null);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [mostrarErrorModal, setMostrarErrorModal] = useState(false);
+    const [msgError, setMsgError] = useState("");
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
@@ -53,7 +55,8 @@ function TablaAdmin() {
 
                     setProductos(productos.filter(productosLista => productosLista.id !== id));
                 }catch(error) {
-                    alert("error al eliminar producto");
+                    setMostrarErrorModal("error al eliminar producto");
+                    setMostrarErrorModal(true);
                     console.error("Error detallado:", error);
                 }
             
@@ -119,6 +122,31 @@ function TablaAdmin() {
                 <Button onClick={confirmDelete}>
                     Eliminar Producto
                 </Button>
+            </Modal.Footer>
+        </Modal>
+
+        <Modal show={mostrarErrorModal} onHide={() => setMostrarErrorModal(false)} centered>
+            <Modal.Header closeButton className="bg-danger text-white">
+                <Modal.Title>Error de Operación</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>{msgError}</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => setMostrarErrorModal(false)}>
+                    Entendido
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        <Modal show={mostrarErrorModal} onHide={() => setMostrarErrorModal(false)}>
+            <Modal.Header closeButton className="bg-danger text-white">
+                <Modal.Title>Error</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>{msgError}</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => setMostrarErrorModal(false)}>Aceptar</Button>
             </Modal.Footer>
         </Modal>
             <div>
