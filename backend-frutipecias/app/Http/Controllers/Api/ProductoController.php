@@ -107,7 +107,7 @@ class ProductoController extends Controller
             $data = $request->only(["nombre","descripcion","ingredientes","nutriscore","categoria_id"]);
             
             //si ya habia imagen se borra
-            if($request->hasFile("image")) {
+            if($request->hasFile("imagen")) {
                 if($producto->imagen_url) {
                     Storage::disk("public")->delete($producto->imagen_url);
                 }
@@ -117,22 +117,22 @@ class ProductoController extends Controller
             $producto->update($data);
 
 
-
-            //info nutricional
-            if ($request->has('informacion_nutricional')) {
+            if ($request->has("informacion_nutricional")) {
+                $infoNutricional = json_decode($request->input("informacion_nutricional"), true);
                 $producto->informacionNutricional()->updateOrCreate(
-                    ['producto_id' => $id],
-                    $request->input('informacion_nutricional')
+                    ["producto_id" => $id],
+                    $infoNutricional
                 );
             }
 
-            //alergenos
-            if ($request->has('alergenos')) {
-                $producto->alergenos()->sync($request->input('alergenos'));
-            } else {
-                //vaciar tabla intermediaria si no recibe ninguno
+            if ($request->has("alergenos")) {
+                $alergenosIds = json_decode($request->input("alergenos"), true);
+                $producto->alergenos()->sync($alergenosIds);
+            }else {
                 $producto->alergenos()->detach();
-            }
+            }   
+
+            
 
             DB::commit();
             return response()->json(['message' => 'Producto actualizado con éxito'], 200);

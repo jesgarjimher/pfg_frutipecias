@@ -6,6 +6,8 @@ function FormEdit() {
     const {id} = useParams();
     const navigate = useNavigate();
 
+    const [nuevaImagen, setNuevaImagen] = useState(null);
+
     const [producto, setProducto] = useState({
         nombre: "",
         ingredientes: "",
@@ -89,15 +91,38 @@ function FormEdit() {
         setProducto({ ...producto, alergenos: nuevosAlergenos });
     };
 
+    const handleFileChange = (e) => {
+        setNuevaImagen(e.target.files[0]);
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem("token");
+
+        const formData = new FormData();
+        //fuerza a laravel a entender que es un UPDATE aunque sea tipo POST
+        formData.append("_method", "PUT"); 
+
+        // Añadimos los campos básicos
+        formData.append("nombre", producto.nombre);
+        formData.append("descripcion", producto.descripcion);
+        formData.append("ingredientes", producto.ingredientes);
+        formData.append("nutriscore", producto.nutriscore);
+        formData.append("categoria_id", producto.categoria_id)
+
+        if(nuevaImagen) {
+            formData.append("imagen", nuevaImagen)
+        }
+
+        formData.append("informacion_nutricional", JSON.stringify(producto.informacion_nutricional));
+        formData.append("alergenos", JSON.stringify(producto.alergenos));
+
         try {
-            await axios.put(`http://127.0.0.1:8000/api/productos/${id}`, producto, {
+            await axios.post(`http://127.0.0.1:8000/api/productos/${id}`, formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Accept": "application/json"
+                    "Content-Type": "multipart/form-data"
                 }
             });
             alert("Producto actualziado");
@@ -135,6 +160,9 @@ function FormEdit() {
                         <option key={cat.id} value={cat.id}>{cat.nombre}</option>
                     ))}
                 </select>
+
+                <label>Nueva imagen</label>
+                <input type="file" onChange={handleFileChange} />
 
                 <hr />
                 <h3>Información Nutricional (por 100g)</h3>
