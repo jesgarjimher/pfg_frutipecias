@@ -8,6 +8,7 @@ use App\Models\Alergeno;
 use App\Models\InformacionNutricional;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -103,14 +104,19 @@ class ProductoController extends Controller
         DB::beginTransaction();
 
         try {
+            $data = $request->only(["nombre","descripcion","ingredientes","nutriscore","categoria_id"]);
             
-            $producto->update([
-                'nombre'       => $request->nombre,
-                'descripcion'  => $request->descripcion,
-                'ingredientes' => $request->ingredientes,
-                'nutriscore'   => $request->nutriscore,
-                'categoria_id' => $request->categoria_id,
-            ]);
+            //si ya habia imagen se borra
+            if($request->hasFile("image")) {
+                if($producto->imagen_url) {
+                    Storage::disk("public")->delete($producto->imagen_url);
+                }
+                $path = $request->file("imagen")->store("productos", "public");
+                $data["imagen_url"] = $path;
+            }
+            $producto->update($data);
+
+
 
             //info nutricional
             if ($request->has('informacion_nutricional')) {
@@ -122,7 +128,6 @@ class ProductoController extends Controller
 
             //alergenos
             if ($request->has('alergenos')) {
-                //
                 $producto->alergenos()->sync($request->input('alergenos'));
             } else {
                 //vaciar tabla intermediaria si no recibe ninguno
