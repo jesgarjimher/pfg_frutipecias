@@ -60,7 +60,7 @@ class ProductoController extends Controller
            //si se recibe imagen
             if($request->hasFile("imagen")) {
                 $path = $request->file("imagen")->store("productos", "public");
-                $data["imagen_url"] = $path;
+                $data["imagen"] = $path;
             }
 
             $producto = Producto::create($data);
@@ -125,7 +125,7 @@ class ProductoController extends Controller
                     Storage::disk("public")->delete($producto->imagen_url);
                 }
                 $path = $request->file("imagen")->store("productos", "public");
-                $data["imagen_url"] = $path;
+                $data["imagen"] = $path;
             }
             $producto->update($data);
 

@@ -11,7 +11,8 @@ class Producto extends Model
         'ingredientes', 
         'nutriscore', 
         'descripcion', 
-        'categoria_id'
+        'categoria_id',
+        'imagen'
     ];
     public function categoria() {
         return $this->belongsTo(Categoria::class);
