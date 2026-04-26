@@ -121,8 +121,8 @@ class ProductoController extends Controller
             
             //si ya habia imagen se borra
             if($request->hasFile("imagen")) {
-                if($producto->imagen_url) {
-                    Storage::disk("public")->delete($producto->imagen_url);
+                if($producto->imagen) {
+                    Storage::disk("public")->delete($producto->imagen);
                 }
                 $path = $request->file("imagen")->store("productos", "public");
                 $data["imagen"] = $path;
@@ -173,9 +173,22 @@ class ProductoController extends Controller
             return response()->json(["message" => "No se ha podido encontrar el producto"], 404);
         }
 
-        $producto->delete();
+        DB::beginTransaction();
+        try {
+            $pathImagen = $producto->imagen;
+            $producto->delete();
 
-        return response()->json(["message" => "Producto con ID {$id} eliminado"], 200);
+            if($pathImagen) {
+                Storage::disk("public")->delete($pathImagen);
+            }
+            DB::commit();
+            return response()->json(["message" => "Producto eliminado"], 200);
+
+        }catch(\Exception $e) {
+            DB::rollBack();
+            return response()->json(["message" => "Error al eliminar el producto", "error" => $e->getMessage()], 500);
+        }
+        
     }
 
 
