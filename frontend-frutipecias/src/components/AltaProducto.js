@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function AltaProducto() {
     const navigate = useNavigate();
+    const [imagen, setImagen] = useState(null);
 
     const [producto, setProducto] = useState({
         nombre: "",
@@ -56,15 +57,35 @@ function AltaProducto() {
         setProducto({ ...producto, alergenos: nuevos });
     };
 
+    const handleFileChange = (e) => {
+        setImagen(e.target.files[0]);
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem("token");
+
+        const formData = new formData();
+
+        formData.append("nombre", producto.nombre);
+        formData.append("descripcion", producto.descripcion || "");
+        formData.append("ingredientes", producto.ingredientes || "");
+        formData.append("nutriscore", producto.nutriscore);
+        formData.append("categoria_id", producto.categoria_id);
+
+        if(imagen) {
+            formData.append("imagen", imagen);
+        }
+
+        formData.append("informacion_nutricional", JSON.stringify(producto.informacion_nutricional));
+        formData.append("alergenos", JSON.stringify(producto.alergenos));
+
         try {
-            await axios.post("http://127.0.0.1:8000/api/productos", producto, {
+            await axios.post("http://127.0.0.1:8000/api/productos", formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
-                    "Accept": "application/json"
+                    "Content-Type": "multipart/form-data"
                 }
             });
             alert("producto creado");
@@ -125,6 +146,10 @@ function AltaProducto() {
                 onChange={handleChange} 
             />
         </div><br/>
+        <div>
+            <label>Imagen</label>
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+        </div>
                 
                 <select name="categoria_id" onChange={handleChange} required>
                     <option value="">Selecciona Categoria</option>
