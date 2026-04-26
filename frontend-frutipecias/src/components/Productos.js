@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button, Card } from "react-bootstrap";
+
 
 function Productos() {
 
@@ -60,12 +62,22 @@ function Productos() {
             </div>
             <h1>{categoria}</h1>
             {productos.map((producto, index) => (
-                <div key={producto.id}>
-                    <p>{index+1}-{producto.nombre}</p>
-                    <p>{producto.categoria.nombre}</p>
-                    <p>{producto.nutriscore}</p>
-                    <img src={pathStorageImg + producto.imagen} alt={producto.name}></img>
-                </div>
+                <Card style={{ width: '18rem' }} key={producto.id}>
+                    <Card.Img variant="top" src={pathStorageImg + producto.imagen} />
+                    <Card.Body>
+                        <Card.Title>{producto.nombre}</Card.Title>
+                        <Card.Text>
+                            {producto.categoria.nombre}
+                        </Card.Text>
+                        <Button variant="primary">Ver más</Button>
+                    </Card.Body>
+                </Card>
+                // <div key={producto.id}>
+                //     <p>{index+1}-{producto.nombre}</p>
+                //     <p>{producto.categoria.nombre}</p>
+                //     <p>{producto.nutriscore}</p>
+                //     <img src={pathStorageImg + producto.imagen} alt={producto.name}></img>
+                // </div>
                 
 
             ))}
