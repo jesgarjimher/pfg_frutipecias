@@ -13,6 +13,8 @@ function TablaAdmin() {
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarErrorModal, setMostrarErrorModal] = useState(false);
     const [msgError, setMsgError] = useState("");
+    const [msgExito, setMsgExito] = useState("");
+    const [mostrarExitoModal, setMostrarExitoModal] = useState(false);
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
@@ -45,7 +47,7 @@ function TablaAdmin() {
     const deleteProducto = async (id) => {
         const token = localStorage.getItem("token");
                 try {
-                    await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`,
+                    const res = await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`,
                         {headers: {
                             "Authorization": `Bearer ${token}`,
                             "Accept": "application/json"
@@ -54,6 +56,8 @@ function TablaAdmin() {
                     });
 
                     setProductos(productos.filter(productosLista => productosLista.id !== id));
+                    setMsgExito(res.response?.data?.message || "Producto eliminado");
+                    setMostrarExitoModal(true);
                 }catch(error) {
                     setMsgError(error.response?.data?.message || "error al eliminar producto");
                     setMostrarErrorModal(true);
@@ -135,6 +139,18 @@ function TablaAdmin() {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => setMostrarErrorModal(false)}>Aceptar</Button>
+            </Modal.Footer>
+        </Modal>
+
+        <Modal show={mostrarExitoModal} onHide={() => setMostrarExitoModal(false)} centered>
+            <Modal.Header closeButton className="bg-success text-white">
+                <Modal.Title>Operación completada</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>{msgExito}</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="success" onClick={() => setMostrarExitoModal(false)}>Aceptar</Button>
             </Modal.Footer>
         </Modal>
             <div>
