@@ -66,7 +66,7 @@ function AltaProducto() {
         e.preventDefault();
         const token = localStorage.getItem("token");
 
-        const formData = new formData();
+        const formData = new FormData();
 
         formData.append("nombre", producto.nombre);
         formData.append("descripcion", producto.descripcion || "");

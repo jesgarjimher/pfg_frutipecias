@@ -42,28 +42,41 @@ class ProductoController extends Controller
         $request->validate([
             "nombre"=>"required|string|max:255",
             "categoria_id" => "required|exists:categorias,id",
-            "nutriscore" => "required|string|max:1"
+            "nutriscore" => "required|string|max:1",
+            "imagen" => "nullable|image|mimes:jpeg,png,jpg|max:2048"
         ]);
 
         DB::beginTransaction();
 
         try{
-           $producto = Producto::create([
+           $data = [
             "nombre" => $request->nombre,
             "descripcion" => $request->descripcion,
             "ingredientes" => $request->ingredientes,
             "nutriscore" => $request->nutriscore,
             "categoria_id" => $request->categoria_id,
-           ]);
+           ];
+
+           //si se recibe imagen
+            if($request->hasFile("imagen")) {
+                $path = $request->file("imagen")->store("productos", "public");
+                $data["imagen_url"] = $path;
+            }
+
+            $producto = Producto::create($data);
 
            //crea relacion informacion_nutricional con relaicon hasOne
            if($request->has("informacion_nutricional")) {
-            $producto->informacionNutricional()->create($request->input("informacion_nutricional"));
+            $info = json_decode($request->input("informacion_nutricional"), true);
+            $producto->informacionNutricional()->create($info);
            }
 
            //
-           if($request->has("alergenos") && is_array($request->input("alergenos"))) {
-                $producto->alergenos()->attach($request->input("alergenos"));
+           if($request->has("alergenos")) {
+                $alergenosIds = json_decode($request->input("alergenos"), true);
+                if (is_array($alergenosIds)) {
+                    $producto->alergenos()->attach($alergenosIds);
+                }
            }
 
            DB::commit();
