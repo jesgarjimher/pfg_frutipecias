@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Card, Placeholder } from "react-bootstrap";
+import { Button, Card, Col, Container, Placeholder, Row } from "react-bootstrap";
 
 
 function Productos() {
@@ -60,10 +60,12 @@ function Productos() {
     }
 
     return (
-        <div>
-            <div>
-                <input type="text" placeholder="buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)}></input>
-            </div>
+        <Container className="my-5">
+            <Row className="justify-content-center mb-5">
+                <Col className="text-center">
+                    <input type="text" placeholder="buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)}></input>
+                </Col>
+            </Row >
             <h1>{categoria}</h1>
             <div className="row">
                 {cargando ? (
@@ -117,7 +119,7 @@ function Productos() {
             <div>
                 {botonesPaginacion}
             </div>
-        </div>
+        </Container>
     )
 }
 

@@ -11,6 +11,8 @@ import Login from './components/Login';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { useState } from 'react';
 import AboutUs from './components/AboutUs';
+import AutoLogout from './components/common/AutoLogout';
+import "./axiosConfig";
 
 
 function App() {
@@ -18,21 +20,23 @@ function App() {
   const isAdmin = user && user.role === 'admin';
   return (
       <Router>
-        <NavBar user={user} setUser={setUser}/>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/productos/:categoria" element={<Productos />} />
-          <Route path="/productos" element={<Productos />} />
+        <AutoLogout setUser={setUser} user={user}>
+          <NavBar user={user} setUser={setUser}/>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/productos/:categoria" element={<Productos />} />
+            <Route path="/productos" element={<Productos />} />
 
-          <Route element={<ProtectedRoute isAdmin={isAdmin} />}>
-            <Route path="/tabla-admin" element={<TablaAdmin />} />
-            <Route path="/form-edit/:id" element={<FormEdit />} />
-            <Route path="/alta-producto" element={<AltaProducto />} />
-          </Route>
-          <Route path="/login" element={<Login setUser={setUser}/>} />
+            <Route element={<ProtectedRoute isAdmin={isAdmin} />}>
+              <Route path="/tabla-admin" element={<TablaAdmin />} />
+              <Route path="/form-edit/:id" element={<FormEdit />} />
+              <Route path="/alta-producto" element={<AltaProducto />} />
+            </Route>
+            <Route path="/login" element={<Login setUser={setUser}/>} />
 
-          <Route path="/about-us" element={<AboutUs />} />
-        </Routes>
+            <Route path="/about-us" element={<AboutUs />} />
+          </Routes>
+        </AutoLogout>
       </Router>
   );
 }
