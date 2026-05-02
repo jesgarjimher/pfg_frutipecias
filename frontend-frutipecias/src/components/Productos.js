@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Card, Col, Container, Placeholder, Row } from "react-bootstrap";
+import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row } from "react-bootstrap";
 
 
 function Productos() {
@@ -13,6 +13,15 @@ function Productos() {
     const [paginacion, setPaginacion] = useState({});
     const [busqueda, setBusqueda] = useState("");
     const [cargando, setCargando] = useState(true);
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [productoClicado, setProductoClicado] = useState(null);
+
+    const handleClose = () => setMostrarModal(false);
+
+    const handleMostrarModal = (producto) => {
+        setProductoClicado(producto);
+        setMostrarModal(true);
+    }
     
     const getProductos = async (pagina = 1) => {
         setCargando(true);
@@ -99,7 +108,7 @@ function Productos() {
                             <Card.Text>
                                 {producto.categoria.nombre}
                             </Card.Text>
-                            <Button variant="primary">Ver más</Button>
+                            <Button variant="primary" onClick={() => handleMostrarModal(producto)}>Ver más</Button>
                         </Card.Body>
                     </Card> 
                 </div>
@@ -119,8 +128,69 @@ function Productos() {
             <div>
                 {botonesPaginacion}
             </div>
+
+            <Modal show={mostrarModal} onHide={handleClose} size="lg" centered>
+                {productoClicado && (
+                    <>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{productoClicado.nombre}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Row>
+                                <Col md={5}>
+                                    <img src={pathStorageImg + productoClicado.imagen} alt={productoClicado.nombre} className="img-fluid rounded shadow-sm mb-3"/>
+                                    <div className="text-center">
+                                        <h5>Nutriscore: <Badge bg="success">{productoClicado.nutriscore}</Badge></h5>
+                                    </div>
+                                </Col>
+                                <Col md={7}>
+                                    <h5>Descripción</h5>
+                                    <p>{productoClicado.descripcion || "Sin descripción"}</p>
+                                    <h5>Ingredientes</h5>
+                                    <p className="small text-muted">{productoClicado.ingredientes}</p>
+
+                                    {productoClicado.informacion_nutricional && (
+                                        <div className="mt-3">
+                                            <h5>Información Nutricional (por 100g)</h5>
+                                            <TableStats info={productoClicado.informacion_nutricional} />
+                                        </div>
+                                    )}
+
+                                    {productoClicado.alergenos && productoClicado.alergenos.length > 0 && (
+                                        <div className="mt-3">
+                                            <h5>Alérgenos</h5>
+                                            {productoClicado.alergenos.map(alergeno => (
+                                                <Badge key={alergeno.id} bg="danger" className="me-1">{alergeno.nombre}</Badge>
+                                            ))}
+                                        </div>
+                                    )}
+                                </Col>
+                            </Row>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>Cerrar</Button>
+                        </Modal.Footer>
+                    </>
+                )}
+            </Modal>
         </Container>
     )
+
+
+    
 }
 
+
+function TableStats({ info }) {
+        return (
+            <ListGroup variant="flush" className="border rounded">
+                <ListGroup.Item className="d-flex justify-content-between"><span>Energía:</span> <strong>{info.energia} kcal</strong></ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between"><span>Grasas:</span> <strong>{info.grasas}g</strong></ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between"><span>Carbohidratos:</span> <strong>{info.carbohidratos}g</strong></ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between"><span>Azúcares:</span> <strong>{info.azucares}g</strong></ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between"><span>Proteínas:</span> <strong>{info.proteinas}g</strong></ListGroup.Item>
+                <ListGroup.Item className="d-flex justify-content-between"><span>Sal:</span> <strong>{info.sal}g</strong></ListGroup.Item>
+            </ListGroup>
+        );
+    }
 export default Productos;
