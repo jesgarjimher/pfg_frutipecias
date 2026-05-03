@@ -14,20 +14,20 @@ function NavBar({user, setUser}) {
         navigate("/")
     }
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="navbar">
       <Container>
         <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
-          <img src="/logo-frutipecias.png"  width="120" height="120" className="d-inline-block align-top me-2" alt="Logo Frutipecias" /></Navbar.Brand>
+          <img src="/logo-frutipecias.png" className="d-inline-block align-top me-2" alt="Logo Frutipecias" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="ms-auto align-items-center">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/about-us">Sobre nosotros</Nav.Link>
             {user ? (
                 <>
                     <Nav.Link as={Link} to="/tabla-admin">Tabla admin</Nav.Link>
                     <Nav.Link as={Link} to="/alta-producto">Nuevo producto</Nav.Link>
-                    <Nav.Link onClick={logOut}>Logout</Nav.Link>
+                    <button onClick={logOut} className="btn btn-logout">Logout</button>
                 </>)
                 : (<></>)
             }
