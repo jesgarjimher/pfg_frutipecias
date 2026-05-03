@@ -6,8 +6,8 @@ const AutoLogout = ({ children, setUser, user }) => {
   const timerRef = useRef(null);
   
   
-  const INACTIVITY_LIMIT = 1 * 60 * 1000; 
-  const SESSION_MAX_LIMIT = 2 * 60 * 1000; 
+  const INACTIVITY_LIMIT = 10 * 60 * 1000; 
+  const SESSION_MAX_LIMIT = 20 * 60 * 1000; 
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
