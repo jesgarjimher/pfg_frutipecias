@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Toast, ToastContainer } from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
@@ -15,6 +15,8 @@ function TablaAdmin() {
     const [msgError, setMsgError] = useState("");
     const [msgExito, setMsgExito] = useState("");
     const [mostrarExitoModal, setMostrarExitoModal] = useState(false);
+    const [mostrarToast, setMostrarToast] = useState(false);
+    const [msgToast, setMsgToast] = useState("");
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
@@ -82,10 +84,34 @@ function TablaAdmin() {
 
     useEffect(() => {
         getProductos();
+        const msg = localStorage.getItem("MsgBienvenida");
+        if(msg) {
+            setMsgToast(msg);
+            setMostrarToast(true);
+            localStorage.removeItem("MsgBienvenida");
+        }
     }, []);
 
     return (
         <div>
+
+            <ToastContainer position="top-end" className="p-3" style={{ zIndex: 11 }}>
+                <Toast 
+                    onClose={() => setMostrarToast(false)} 
+                    show={mostrarToast} 
+                    delay={7000} 
+                    autohide 
+                    bg="success"
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Backend frutipecias</strong>
+                        <small>Logueado correctamente</small>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">{msgToast}</Toast.Body>
+                </Toast>
+            </ToastContainer>
+
+
             <h1>Administrar productos</h1>
             <table>
                 <thead>

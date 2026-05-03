@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
 
 function Login({setUser}) {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
 
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [msgSesion, setMsgSession] = useState("");
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const msg = localStorage.getItem("msgLogout");
+        if(msg) {
+            setMsgSession(msg);
+            setMostrarModal(true);
+            localStorage.removeItem("msgLogout");
+        }
+    })
 
     const handleChange = (event) => {
         setCredentials({ ...credentials, [event.target.name]: event.target.value });
@@ -23,10 +36,10 @@ function Login({setUser}) {
             // localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("user", JSON.stringify(userData));
             localStorage.setItem("token", token)
-
+            localStorage.setItem("MsgBienvenida", "Bienvenido admin")
             setUser(userData);
             
-            alert("Usuario logueado " + response.data.user.name);
+            console.log("Usuario logueado " + response.data.user.name);
             navigate("/tabla-admin");
 
         } catch(error) {
@@ -58,6 +71,18 @@ function Login({setUser}) {
                     </div>
                 </div>
             </div>
+
+            <Modal show={mostrarModal} onHide={() => setMostrarModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sesión cerrada</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>{msgSesion}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => setMostrarModal(false)}>Aceptar</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }
