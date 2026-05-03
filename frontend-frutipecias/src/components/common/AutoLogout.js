@@ -6,15 +6,16 @@ const AutoLogout = ({ children, setUser, user }) => {
   const timerRef = useRef(null);
   
   
-  const INACTIVITY_LIMIT = 5 * 60 * 1000; 
-  const SESSION_MAX_LIMIT = 10 * 60 * 1000; 
+  const INACTIVITY_LIMIT = 1 * 60 * 1000; 
+  const SESSION_MAX_LIMIT = 2 * 60 * 1000; 
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.setItem("msgLogout", "Tu sesi'on ha caducado")
     setUser(null);
     navigate("/login");
-    alert("Tu sesión ha caducado por seguridad.");
+    console.log("Tu sesión ha caducado por seguridad.");
   }, [navigate, setUser]);
 
   const resetTimer = useCallback(() => {
