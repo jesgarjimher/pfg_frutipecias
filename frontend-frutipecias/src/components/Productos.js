@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row } from "react-bootstrap";
+import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Form, Label } from "react-bootstrap";
 
 
 function Productos() {
@@ -70,20 +70,22 @@ function Productos() {
 
     return (
         <Container className="my-5">
-            <Row className="justify-content-center mb-5">
-                <Col className="text-center">
-                    <input type="text" placeholder="buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)}></input>
+                <Col className="text-center mx-auto" md={6}>
+                    <Form onSubmit={(e) => e.preventDefault()}>
+                        <Form.Group>
+                            <Form.Control type="text" placeholder="buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)}></Form.Control>
+                        </Form.Group>
+                    </Form>
                 </Col>
-            </Row >
+                
             <h1>{categoria}</h1>
-            <div className="row">
+            <div className="row g-5">
                 {cargando ? (
                     [1,2,3,4,5,6,7,8].map((n) => (
-                        <div className="col-12 col-md-6 col-xl-3 mb-4" key={n}>
-                            <Card style={{ width: '18rem' }}>
-                                {/* Un div gris que simula la imagen */}
+                        <div className="col-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={n}>
+                            <Card className="my-card">
                                 <div className="placeholder-glow">
-                                    <div className="placeholder col-12" style={{ height: '180px' }}></div>
+                                    <div className="placeholder col-12 placeholder-img"></div>
                                 </div>
                                 <Card.Body>
                                     <Placeholder as={Card.Title} animation="glow">
@@ -101,14 +103,14 @@ function Productos() {
                 ) : (
                     productos.map((producto, index) => (
                 <div className="col-12 col-md-6 col-xl-3" key={producto.id}>
-                    <Card style={{ width: '18rem' }} key={producto.id}>
-                        <Card.Img variant="top" src={pathStorageImg + producto.imagen} />
+                    <Card className="my-card" key={producto.id}>
+                        <Card.Img variant="top" className="card-img-top" src={pathStorageImg + producto.imagen} />
                         <Card.Body>
-                            <Card.Title>{producto.nombre}</Card.Title>
+                            <Card.Title className="card-title">{producto.nombre}</Card.Title>
                             <Card.Text>
                                 {producto.categoria.nombre}
                             </Card.Text>
-                            <Button variant="primary" onClick={() => handleMostrarModal(producto)}>Ver más</Button>
+                            <Button variant="primary" className="mt-3" onClick={() => handleMostrarModal(producto)}>Ver más</Button>
                         </Card.Body>
                     </Card> 
                 </div>
