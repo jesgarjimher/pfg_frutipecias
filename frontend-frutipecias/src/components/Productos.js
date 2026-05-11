@@ -64,7 +64,7 @@ function Productos() {
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
-            <button key={pag} onClick={() => getProductos(pag)}>{pag}</button>
+            <Button key={pag} onClick={() => getProductos(pag)}>{pag}</Button>
         )
     }
 
@@ -78,7 +78,7 @@ function Productos() {
                     </Form>
                 </Col>
                 
-            <h1>{categoria}</h1>
+            <h1 className="title my-5 text-center">{categoria}</h1>
             <div className="row g-5">
                 {cargando ? (
                     [1,2,3,4,5,6,7,8].map((n) => (
@@ -127,7 +127,7 @@ function Productos() {
             
             </div>
 
-            <div>
+            <div className="text-center my-5">
                 {botonesPaginacion}
             </div>
 
