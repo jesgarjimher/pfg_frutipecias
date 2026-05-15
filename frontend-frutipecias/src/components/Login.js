@@ -20,7 +20,7 @@ function Login({setUser}) {
             setMostrarModal(true);
             localStorage.removeItem("msgLogout");
         }
-    })
+    },[])
 
     const handleChange = (event) => {
         setCredentials({ ...credentials, [event.target.name]: event.target.value });
@@ -28,6 +28,7 @@ function Login({setUser}) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setError("");
         try {
             const response = await axios.post("http://127.0.0.1:8000/api/login", credentials);
             const userData = {...response.data.user, loggedIn: true, role: "admin"};
@@ -44,6 +45,7 @@ function Login({setUser}) {
 
         } catch(error) {
             console.error("Error en login:", error.response?.data || error.message);
+            console.log("Capturando error en el componente...");
             setError("Email o contrasena incorrectos");
         }
     };
