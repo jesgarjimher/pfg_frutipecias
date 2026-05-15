@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Form, Label } from "react-bootstrap";
+import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Form, Label, Pagination } from "react-bootstrap";
 
 
 function Productos() {
@@ -64,7 +64,7 @@ function Productos() {
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
-            <Button key={pag} onClick={() => getProductos(pag)}>{pag}</Button>
+            <Pagination.Item active={pag === pagina} key={pag} onClick={() => getProductos(pag)}>{pag}</Pagination.Item>
         )
     }
 
@@ -110,7 +110,7 @@ function Productos() {
                             <Card.Text>
                                 {producto.categoria.nombre}
                             </Card.Text>
-                            <Button variant="primary" className="mt-3" onClick={() => handleMostrarModal(producto)}>Ver más</Button>
+                            <Button variant="primary my-btn" className="mt-3" onClick={() => handleMostrarModal(producto)}>Ver más</Button>
                         </Card.Body>
                     </Card> 
                 </div>
@@ -127,8 +127,9 @@ function Productos() {
             
             </div>
 
-            <div className="text-center my-5">
-                {botonesPaginacion}
+            <div className="d-flex justify-content-center">
+                <Pagination className="custom-pagination">{botonesPaginacion}</Pagination>
+                
             </div>
 
             <Modal show={mostrarModal} onHide={handleClose} size="lg" centered>

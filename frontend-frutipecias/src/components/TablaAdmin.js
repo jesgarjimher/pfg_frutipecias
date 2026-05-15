@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button, Modal, Toast, ToastContainer } from "react-bootstrap";
+import { Button, Card, Container, Modal, Pagination, Table, Toast, ToastContainer } from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
@@ -20,7 +20,7 @@ function TablaAdmin() {
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
-            <button key={pag} onClick={() => getProductos(pag)}>{pag}</button>
+            <Pagination.Item key={pag} active={pag === pagina} onClick={() => getProductos(pag)}>{pag}</Pagination.Item>
         )
     }
 
@@ -93,7 +93,7 @@ function TablaAdmin() {
     }, []);
 
     return (
-        <div>
+        <Container fluid="md" className="my-5 px-1">
 
             <ToastContainer position="top-end" className="p-3" style={{ zIndex: 11 }}>
                 <Toast 
@@ -112,32 +112,43 @@ function TablaAdmin() {
             </ToastContainer>
 
 
-            <h1>Administrar productos</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    {productos.map(producto => 
-                    <tr key={producto.id}>
-                        <td>{producto.id}</td>
-                        <td>{producto.nombre}</td>
-                        <td>{producto.categoria.nombre}</td>
-                        <td>
-                            <button onClick={() => handleMostrar(producto.id)}>Eliminar</button>
-                            <Link to={`/form-edit/${producto.id}`}>Editar</Link>
-                        </td>
-                    </tr>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1 className="title">Administrar Productos</h1>
+                <Link to="/alta-producto" className="btn my-btn text-white">+ Nuevo Producto</Link>
+            </div>
+            <Card className="border-0">
+                <Card.Body className="p-0">
+                    <div className="table-responsive">
+                        <Table hover responsive className="mb-0">
+                            <thead className="bg-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
                             
-                    )}
-                </tbody>
-            </table>
+                            <tbody>
+                                {productos.map(producto => 
+                                <tr key={producto.id}>
+                                    <td>{producto.id}</td>
+                                    <td>{producto.nombre}</td>
+                                    <td>{producto.categoria.nombre}</td>
+                                    <td>
+                                        <Button variant="outline-danger" size="sm" onClick={() => handleMostrar(producto.id)}>Eliminar</Button>
+                                        <Link to={`/form-edit/${producto.id}`} className="btn btn-sm btn-outline-primary mx-2">Editar</Link>
+                                    </td>
+                                </tr>
+                                        
+                                )}
+                            </tbody>
+                            
+                        </Table>
+                    </div>
+                </Card.Body>
+
+            </Card>
             <Modal show={mostrarModal} onHide={handleCerrar} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Confirmar eliminación</Modal.Title>
@@ -179,12 +190,11 @@ function TablaAdmin() {
                 <Button variant="success" onClick={() => setMostrarExitoModal(false)}>Aceptar</Button>
             </Modal.Footer>
         </Modal>
-            <div>
-                {botonesPaginacion}
-                
-
+            <div className="d-flex justify-content-center mt-4">
+                <Pagination className="custom-pagination">{botonesPaginacion}</Pagination>
+               
             </div>
-        </div>
+        </Container>
     )
 }
 

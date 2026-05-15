@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Container, Modal, Form } from 'react-bootstrap';
 
 function Login({setUser}) {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -49,24 +49,24 @@ function Login({setUser}) {
     };
 
     return (
-        <div>
+        <Container className="d-flex align-items-center justify-content-center vh-100">
             <div>
                 <div >
                     <div>
                         <div >
-                            <h2>Login Admin</h2>
+                            <h2 className="title mb-4">Login Admin</h2>
                             {error && <div className="alert alert-danger">{error}</div>}
-                            <form onSubmit={handleSubmit}>
-                                <div>
-                                    <label>Email</label>
-                                    <input type="email" name="email" className="form-control" onChange={handleChange} required />
-                                </div>
-                                <div>
-                                    <label>Contrasena</label>
-                                    <input type="password" name="password" className="form-control" onChange={handleChange} required />
-                                </div>
-                                <button type="submit" className="btn btn-primary">Log in</button>
-                            </form>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group>
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email" name="email" onChange={handleChange} required />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Contrasena</Form.Label>
+                                    <Form.Control type="password" name="password" onChange={handleChange} required />
+                                </Form.Group>
+                                <Button type="submit" className="btn-primary mt-3 w-100 my-btn">Log in</Button>
+                            </Form>
                         </div>
                     </div>
                 </div>
@@ -74,16 +74,16 @@ function Login({setUser}) {
 
             <Modal show={mostrarModal} onHide={() => setMostrarModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sesión cerrada</Modal.Title>
+                    <Modal.Title className="title">Sesión cerrada</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>{msgSesion}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => setMostrarModal(false)}>Aceptar</Button>
+                    <Button variant="primary my-btn" onClick={() => setMostrarModal(false)}>Aceptar</Button>
                 </Modal.Footer>
             </Modal>
-        </div>
+        </Container>
     );
 }
 
