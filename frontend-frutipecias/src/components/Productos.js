@@ -146,12 +146,12 @@ function Productos() {
                                         <h5>Nutriscore: <Badge bg="success">{productoClicado.nutriscore}</Badge></h5>
                                     </div>
                                 </Col>
+                                
                                 <Col md={7}>
                                     <h5>Descripción</h5>
                                     <p>{productoClicado.descripcion || "Sin descripción"}</p>
                                     <h5>Ingredientes</h5>
                                     <p className="small text-muted">{productoClicado.ingredientes}</p>
-
                                     {productoClicado.informacion_nutricional && (
                                         <div className="mt-3">
                                             <h5>Información Nutricional (por 100g)</h5>
@@ -163,7 +163,7 @@ function Productos() {
                                         <div className="mt-3">
                                             <h5>Alérgenos</h5>
                                             {productoClicado.alergenos.map(alergeno => (
-                                                <Badge key={alergeno.id} bg="danger" className="me-1">{alergeno.nombre}</Badge>
+                                                <Badge key={alergeno.id} bg="danger" className="me-1">{alergeno.nombre} {alergeno.icono}</Badge>
                                             ))}
                                         </div>
                                     )}
