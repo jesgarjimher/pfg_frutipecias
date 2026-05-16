@@ -198,6 +198,15 @@ body {
     object-fit: contain;
 }
 
+.my-login-wrapper {
+    height: calc(100vh - 100px); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; 
+}
+
 
 /*/home*/
 

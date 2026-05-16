@@ -51,27 +51,21 @@ function Login({setUser}) {
     };
 
     return (
-        <Container className="d-flex align-items-center justify-content-center vh-100">
-            <div>
-                <div >
-                    <div>
-                        <div >
-                            <h2 className="title mb-4">Login Admin</h2>
-                            {error && <div className="alert alert-danger">{error}</div>}
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group>
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" name="email" onChange={handleChange} required />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Label>Contrasena</Form.Label>
-                                    <Form.Control type="password" name="password" onChange={handleChange} required />
-                                </Form.Group>
-                                <Button type="submit" className="btn-primary mt-3 w-100 my-btn">Log in</Button>
-                            </Form>
-                        </div>
-                    </div>
-                </div>
+        <Container className="d-flex align-items-center justify-content-center">
+            <div className="my-login-wrapper">
+                    <h2 className="title mb-4">Login Admin</h2>
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    <Form onSubmit={handleSubmit} className="shadow rounded p-4 bg-light">
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" name="email" onChange={handleChange} required />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Contrasena</Form.Label>
+                            <Form.Control type="password" name="password" onChange={handleChange} required />
+                        </Form.Group>
+                        <Button type="submit" className="btn-primary mt-3 w-100 my-btn">Log in</Button>
+                    </Form>
             </div>
 
             <Modal show={mostrarModal} onHide={() => setMostrarModal(false)} centered>
