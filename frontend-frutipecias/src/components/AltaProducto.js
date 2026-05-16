@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, {useEffect, useState} from "react";
+import { Alert, Button, Card, Col, Container, Row, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function AltaProducto() {
     const navigate = useNavigate();
     const [imagen, setImagen] = useState(null);
-
+    const [errors, setErrors] = useState({});
     const [producto, setProducto] = useState({
         nombre: "",
         ingredientes: "",
@@ -65,7 +66,7 @@ function AltaProducto() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem("token");
-
+        setErrors({});
         const formData = new FormData();
 
         formData.append("nombre", producto.nombre);
@@ -91,124 +92,157 @@ function AltaProducto() {
             alert("producto creado");
             navigate("/tabla-admin");
         }catch(error) {
-            console.error("Error creando el producto",error);
-            alert("error al crear el producto");
-            if(error.response?.status === 401) {
-                alert("sesion caducada");
-                navigate("/login")
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors);
+            }else if (error.response?.status === 401) {
+                navigate("/login");
             }
         }
     }
 
 
-    return(
-        <div>
-            <h1>Alta de Nuevo Producto</h1>
-            <form onSubmit={handleSubmit}>
-                <h3>Alimento</h3>
-                <div>
-        <label>Nombre del Producto:</label><br/>
-        <input 
-            type="text"
-            name="nombre" 
-            placeholder="Ej: nueces" 
-            onChange={handleChange} 
-            required 
-        />
-    </div>
+    return (
+        <Container className="my-5">
+            <Card className="border-0 shadow-sm">
+                <Card.Header className="border-0 py-3">
+                    <h1 className="mb-0 title">Alta de Nuevo Producto</h1>
+                </Card.Header>
+                <Card.Body className="px-4">
+                    <Form onSubmit={handleSubmit}>
+                        {Object.keys(errors).length > 0 && (
+                            <Alert variant="danger" onClose={() => setErrors({})} dismissible>
+                                <Alert.Heading>Error al crear el producto:</Alert.Heading>
+                                <ul className="mb-0">
+                                    {Object.entries(errors).map(([field, messages]) => (
+                                        <li key={field}>
+                                            <strong>{field.replace('_', ' ')}:</strong> {messages.join(", ")}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Alert>
+                        )}
 
-    <div>
-        <label>Descripcion</label><br/>
-        <textarea 
-            name="descripcion" 
-            placeholder="Descripcion..." 
-            onChange={handleChange} 
-        />
-    </div>
+                        <h3 className="mb-3 mt-2">Datos Generales</h3>
+                        <Row>
+                            <Col md={8}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Nombre del Producto:</Form.Label>
+                                    <Form.Control name="nombre" type="text" maxLength="100" placeholder="Ej: nueces" onChange={handleChange} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={8}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Descripción:</Form.Label>
+                                    <Form.Control name="descripcion" as="textarea" maxLength="1000" placeholder="Descripción..." onChange={handleChange} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={8}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Ingredientes:</Form.Label>
+                                    <Form.Control as="textarea" name="ingredientes" maxLength="1000" placeholder="Agua, conservantes..." onChange={handleChange} required />
+                                </Form.Group>
+                            </Col>
 
-    <div>
-        <label>Ingredientes:</label><br/>
-        <textarea 
-            name="ingredientes" 
-            placeholder="Agua,conservantes..." 
-            onChange={handleChange} 
-        />
-    </div>
+                                <Form.Group className="mb-3 my-nutri">
+                                    <Form.Label>Nutriscore</Form.Label>
+                                    <Form.Control name="nutriscore" maxLength="1" pattern="[A-Ea-e]{1}" onChange={handleChange} placeholder="A-E" className="text-center" required />
+                                </Form.Group>
 
-        <div>
-            <label>Nutriscore</label><br/>
-            {/* usar select */}
-            <input 
-                type="text"
-                name="nutriscore" 
-                placeholder="A" 
-                maxLength="1" 
-                onChange={handleChange} 
-            />
-        </div><br/>
-        <div>
-            <label>Imagen</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-        </div>
-                
-                <select name="categoria_id" onChange={handleChange} required>
-                    <option value="">Selecciona Categoria</option>
-                    {categorias.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-                </select>
+                            <Col md={4}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Categoría:</Form.Label>
+                                    <Form.Select name="categoria_id" onChange={handleChange} required>
+                                        <option value="">Selecciona Categoria</option>
+                                        {categorias.map(cat => (
+                                            <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
 
-                <h3>Información Nutricional por cada 100g</h3>
-<div>
-    
-    <div>
-        <label>Energía (kcal):</label><br/>
-        <input type="number" name="informacion_nutricional.energia" placeholder="0" onChange={handleChange} />
-    </div>
+                            <Col md={12} className="mt-2">
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Imagen:</Form.Label>
+                                    <div className="d-flex align-items-center gap-3 mb-2">
+                                        <div className="border rounded d-flex align-items-center justify-content-center bg-light img-preview-container">
+                                            {imagen ? (
+                                                <img src={URL.createObjectURL(imagen)} alt="Vista previa" className="img-preview" />
+                                            ) : (
+                                                <span className="text-muted small text-center px-1">Sin imagen</span>
+                                            )}
+                                        </div>
+                                        <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
+                                    </div>
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
-    <div>
-        <label>Grasas totales (g):</label><br/>
-        <input type="number" step="0.1" name="informacion_nutricional.grasas" placeholder="0.0" onChange={handleChange} />
-    </div>
+                        <hr />
 
-    <div>
-        <label>Grasas Saturadas (g):</label><br/>
-        <input type="number" step="0.1" name="informacion_nutricional.grasas_saturadas" placeholder="0.0" onChange={handleChange} />
-    </div>
+                        <h3 className="mb-3 mt-4">Información Nutricional por cada 100g</h3>
+                        <Row className="g-3">
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Energía (kcal)</Form.Label>
+                                <Form.Control type="number" name="informacion_nutricional.energia" placeholder="0" onChange={handleChange} required />
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Grasas (g)</Form.Label>
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.grasas" placeholder="0.0" onChange={handleChange} required />
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Grasas Sat. (g)</Form.Label>
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.grasas_saturadas" placeholder="0.0" onChange={handleChange} required />
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Carbohidratos (g)</Form.Label>
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.carbohidratos" placeholder="0.0" onChange={handleChange} required />
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Azúcares (g)</Form.Label>
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.azucares" placeholder="0.0" onChange={handleChange} required />
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Proteínas (g)</Form.Label>
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.proteinas" placeholder="0.0" onChange={handleChange} required />
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Sal (g)</Form.Label>
+                                <Form.Control type="number" step="0.01" name="informacion_nutricional.sal" placeholder="0.00" onChange={handleChange} required />
+                            </Col>
+                        </Row>
 
-    <div>
-        <label>Carbohidratos (g):</label><br/>
-        <input type="number" step="0.1" name="informacion_nutricional.carbohidratos" placeholder="0.0" onChange={handleChange} />
-    </div>
+                        <hr className="my-4" />
 
-    <div>
-        <label>Azúcares (g):</label><br/>
-        <input type="number" step="0.1" name="informacion_nutricional.azucares" placeholder="0.0" onChange={handleChange} />
-    </div>
+                        <h5 className="text-muted mb-3">Alérgenos</h5>
+                        <div className="d-flex flex-wrap gap-2 mb-4">
+                            {alergenos.map(a => (
+                                <div key={a.id} className="border rounded p-2 bg-light">
+                                    <Form.Check 
+                                        type="checkbox"
+                                        id={`alergeno-${a.id}`}
+                                        label={a.nombre}
+                                        checked={producto.alergenos.includes(a.id)}
+                                        onChange={() => handleAlergenosChange(a.id)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
 
-    <div>
-        <label>Proteínas (g):</label><br/>
-        <input type="number" step="0.1" name="informacion_nutricional.proteinas" placeholder="0.0" onChange={handleChange} />
-    </div>
+                        <hr className="my-4" />
 
-    <div>
-        <label>Sal (g):</label><br/>
-        <input type="number" step="0.01" name="informacion_nutricional.sal" placeholder="0.00" onChange={handleChange} />
-    </div>
-
-</div>
-                
-
-                <h3>Alérgenos</h3>
-                {alergenos.map(a => (
-                    <label key={a.id}>
-                        <input type="checkbox" onChange={() => handleAlergenosChange(a.id)} />
-                        {a.nombre}
-                    </label>
-                ))}
-                <br/><br/>
-                <button type="submit" style={{backgroundColor: 'blue', color: 'white'}}>Crear Producto</button>
-            </form>
-        </div>
-    )
+                        <div className="d-flex justify-content-end gap-2 mt-4">
+                            <Button variant="light" type="button" onClick={() => navigate(-1)}>
+                                Cancelar
+                            </Button>
+                            <Button type="submit" className="my-btn px-4" style={{ backgroundColor: '#007bff', color: 'white', border: 'none' }}>
+                                Crear Producto
+                            </Button>
+                        </div>
+                    </Form>
+                </Card.Body>
+            </Card>
+        </Container>
+    );
 }
 
 

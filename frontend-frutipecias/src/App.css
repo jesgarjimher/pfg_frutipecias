@@ -166,3 +166,37 @@ body {
     height: 100px;
     overflow: hidden;
 }
+
+
+/* Importar fuente manuscrita */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+
+.my-about-title {
+    color: #2d5a27;
+    line-height: 1.2;
+}
+
+.my-about-intro, .my-about-text {
+    text-align: justify;
+}
+
+.my-about-handwritten {
+    font-family: 'Dancing Script', 'Cursive', sans-serif;
+    color: #6b8e23;
+    font-style: italic;
+}
+
+.my-about-btn {
+    background-color: #8db600 !important;
+    color: white !important;
+}
+
+.my-about-btn:hover {
+    background-color: #7a9d00 !important;
+    filter: brightness(90%);
+}
+
+.my-about-img {
+    max-height: 500px;
+    object-fit: contain;
+}
