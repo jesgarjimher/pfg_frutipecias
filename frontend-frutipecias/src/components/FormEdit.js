@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, {useEffect, useState} from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 
 function FormEdit() {
     const {id} = useParams();
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
 
     const [nuevaImagen, setNuevaImagen] = useState(null);
 
@@ -99,6 +100,7 @@ function FormEdit() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrors({});
         const token = localStorage.getItem("token");
 
         const formData = new FormData();
@@ -130,8 +132,9 @@ function FormEdit() {
             navigate("/tabla-admin");
         }catch(error) {
             console.error("Error al actualizar", error);
-            if(error.response?.status === 401) {
-                alert("Tu sesion ha caducado");
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors);
+            }else if (error.response?.status === 401) {
                 navigate("/login");
             }
         }
@@ -145,12 +148,24 @@ function FormEdit() {
                 </Card.Header>
                 <Card.Body className="px-4">
                     <Form onSubmit={handleSubmit}>
+                        {Object.keys(errors).length > 0 && (
+                            <Alert variant="danger" onClose={() => setErrors({})} dismissible>
+                                <Alert.Heading>Error al guardar los cambios:</Alert.Heading>
+                                <ul className="mb-0">
+                                    {Object.entries(errors).map(([field, messages]) => (
+                                        <li key={field}>
+                                            <strong>{field.replace('_', ' ')}:</strong> {messages.join(", ")}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Alert>
+                        )}
                         <h3 className="mb-3 mt-2">Datos Generales</h3>
                         <Row>
                             <Col md={8}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Nombre:</Form.Label>
-                                    <Form.Control name="nombre" type="text" maxLength="100" value={producto.nombre} onChange={handleChange} required/>
+                                    <Form.Control name="nombre" type="text" maxLength="100" value={producto.nombre} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                             <Col md={8}>

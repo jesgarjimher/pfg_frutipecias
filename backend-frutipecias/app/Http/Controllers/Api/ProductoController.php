@@ -113,6 +113,12 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id);
 
+        $request->validate([
+            "nombre" => "required|string|max:255",
+            "categoria_id" => "required|exists:categorias,id",
+            "nutriscore" => "required|string|max:1",
+            "imagen" => "nullable|image|mimes:jpeg,png,jpg|max:2048"
+        ]);
         // Usamos una transacción para asegurarnos de que se guarde todo o nada
         DB::beginTransaction();
 
