@@ -22,7 +22,7 @@ function AboutUs() {
                     </p>
 
                     <p className="my-about-handwritten fs-4 my-4">
-                        "Frutipecias no es una tienda, no vendemos nada, regalamos conocimiento culinario."
+                        "Frutipecias no es una tienda. No vendemos nada.<br/> Regalamos conocimiento culinario."
                     </p>
 
                     <Button as={Link} to="/productos" size="lg" className="my-about-btn border-0 px-4 py-2 mt-3">Descubrir productos</Button>

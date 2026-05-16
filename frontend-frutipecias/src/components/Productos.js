@@ -127,7 +127,7 @@ function Productos() {
             
             </div>
 
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center mt-5">
                 <Pagination className="custom-pagination">{botonesPaginacion}</Pagination>
                 
             </div>
