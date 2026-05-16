@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {useEffect, useState} from "react";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 
 function FormEdit() {
@@ -137,65 +138,135 @@ function FormEdit() {
     }
 
     return (
-        <div>
-            <h1>Editar Producto #{id}</h1>
-            <form onSubmit={handleSubmit}>
-                <h3>Datos Generales</h3>
-                <label>Nombre:</label>
-                <input name="nombre" value={producto.nombre || ""} onChange={handleChange} /><br />
+        <Container className="my-5">
+            <Card className="border-0">
+                <Card.Header className="border-0 py-3">
+                    <h1 className="mb-0 title">Editar Producto ID:{id}</h1>
+                </Card.Header>
+                <Card.Body className="px-4">
+                    <Form onSubmit={handleSubmit}>
+                        <h3 className="mb-3 mt-2">Datos Generales</h3>
+                        <Row>
+                            <Col md={8}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Nombre:</Form.Label>
+                                    <Form.Control name="nombre" type="text" maxLength="100" value={producto.nombre} onChange={handleChange} required/>
+                                </Form.Group>
+                            </Col>
+                            <Col md={8}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Descripción:</Form.Label>
+                                    <Form.Control name="descripcion" as="textarea" maxLength="1000" value={producto.descripcion || ""} onChange={handleChange} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={8}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Ingredientes:</Form.Label>
+                                    <Form.Control as="textarea" name="ingredientes" maxLength="1000" value={producto.ingredientes || ""} onChange={handleChange} required/>
+                                </Form.Group>
+                            </Col>
+                          
+                                <Form.Group className="mb-3 my-nutri">
+                                    <Form.Label>Nutriscore</Form.Label>
+                                    <Form.Control name="nutriscore" value={producto.nutriscore} maxLength="1" pattern="[A-Ea-e]{1}" onChange={handleChange} placeholder="A-E" className="text-center" required/>
+                                </Form.Group>
 
-                <label>Descripción:</label>
-                <textarea name="descripcion" value={producto.descripcion || ""} onChange={handleChange} /><br />
+                            <Col md={3}>
+                                <Form.Group className="mb-3 text-end">
+                                    <Form.Label>Categoría:</Form.Label>
+                                        <Form.Select name="categoria_id" value={producto.categoria_id} onChange={handleChange} required>
+                                            {categorias.map(cat => (
+                                                <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                                            ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
 
-                <label>Ingredientes:</label>
-                <textarea name="ingredientes" value={producto.ingredientes || ""} onChange={handleChange} /><br />
 
-                <label>Nutriscore:</label>
-                <input name="nutriscore" value={producto.nutriscore || ""} maxLength="1" onChange={handleChange} style={{width: '30px'}} /><br />
 
-                <label>Categoría:</label>
-                <select name="categoria_id" value={producto.categoria_id || ""} onChange={handleChange}>
-                    <option value="">Seleccione...</option>
-                    {categorias.map(cat => (
-                        <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-                    ))}
-                </select>
+                            <Col md={12} className="mt-2">
+                            <Form.Group className="mb-3">
+                                <Form.Label>Imagen:</Form.Label>
+                                <div className="d-flex align-items-center gap-3 mb-2">
+                                    <div className="border rounded d-flex align-items-center justify-content-center bg-light img-preview-container" >
+                                        {nuevaImagen ? (
+                                            <img src={URL.createObjectURL(nuevaImagen)} alt="Vista previa" className="img-preview" />
+                                        ) : producto.imagen ? (
+                                            <img src={`http://127.0.0.1:8000/storage/${producto.imagen}`} alt="Imagen actual" className="img-preview" />
+                                        ) : (
+                                            <span className="text-muted small text-center px-1">Sin imagen</span>
+                                        )}
+                                    </div>
+                                    <Form.Control type="file" accept="image/*" onChange={handleFileChange} />   
+                                </div>
+                            </Form.Group>
+                        </Col>
+                        </Row>
+                        
+                        <hr/>
+                        
+                        <Row className="g-3">
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Energía</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.energia" value={producto.informacion_nutricional?.energia || 0} onChange={handleChange} required/>
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Grasas</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.grasas" value={producto.informacion_nutricional?.grasas || 0} onChange={handleChange} required/>
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Grasas Sat.</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.grasas_saturadas" value={producto.informacion_nutricional?.grasas_saturadas || 0} onChange={handleChange} required/>
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Carbohidratos</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.carbohidratos" value={producto.informacion_nutricional?.carbohidratos || 0} onChange={handleChange} required/>
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Azúcares</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.azucares" value={producto.informacion_nutricional?.azucares || 0} onChange={handleChange} required/>
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Proteínas</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.proteinas" value={producto.informacion_nutricional?.proteinas || 0} onChange={handleChange} required/>
+                            </Col>
+                            <Col xs={6} md={3}>
+                                <Form.Label className="small">Sal</Form.Label>
+                                <Form.Control type="number" step="0.01" min="0" max="10000" name="informacion_nutricional.sal" value={producto.informacion_nutricional?.sal || 0} onChange={handleChange} required/>
+                            </Col>
+                        </Row>
 
-                <label>Nueva imagen</label>
-                <input type="file" onChange={handleFileChange} />
+                        <hr className="my-4" />
 
-                <hr />
-                <h3>Información Nutricional (por 100g)</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <label>Energía: <input type="number" step="0.01" name="informacion_nutricional.energia" value={producto.informacion_nutricional?.energia || 0} onChange={handleChange} /></label>
-                    <label>Grasas: <input type="number" step="0.01" name="informacion_nutricional.grasas" value={producto.informacion_nutricional?.grasas || 0} onChange={handleChange} /></label>
-                    <label>Grasas Sat: <input type="number" step="0.01" name="informacion_nutricional.grasas_saturadas" value={producto.informacion_nutricional?.grasas_saturadas || 0} onChange={handleChange} /></label>
-                    <label>Carbohidratos: <input type="number" step="0.01" name="informacion_nutricional.carbohidratos" value={producto.informacion_nutricional?.carbohidratos || 0} onChange={handleChange} /></label>
-                    <label>Azúcares: <input type="number" step="0.01" name="informacion_nutricional.azucares" value={producto.informacion_nutricional?.azucares || 0} onChange={handleChange} /></label>
-                    <label>Proteínas: <input type="number" step="0.01" name="informacion_nutricional.proteinas" value={producto.informacion_nutricional?.proteinas || 0} onChange={handleChange} /></label>
-                    <label>Sal: <input type="number" step="0.01" name="informacion_nutricional.sal" value={producto.informacion_nutricional?.sal || 0} onChange={handleChange} /></label>
-                </div>
+                        <h5 className="text-muted mb-3">Alérgenos</h5>
+                        <div className="d-flex flex-wrap gap-2 mb-4">
+                            {alergenos.map(alergeno => (
+                                <div key={alergeno.id} className="border rounded p-2 bg-light">
+                                    <Form.Check 
+                                        type="checkbox"
+                                        id={`alergeno-${alergeno.id}`}
+                                        label={alergeno.nombre}
+                                        checked={producto.alergenos.includes(alergeno.id)}
+                                        onChange={() => handleAlergenosChange(alergeno.id)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
 
-                <hr />
-                <h3>Alérgenos</h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-                    {alergenos.map(alergeno => (
-                        <label key={alergeno.id}>
-                            <input 
-                                type="checkbox" 
-                                checked={producto.alergenos.includes(alergeno.id)} 
-                                onChange={() => handleAlergenosChange(alergeno.id)}
-                            />
-                            {alergeno.nombre}
-                        </label>
-                    ))}
-                </div>
+                        <hr className="my-4" />
 
-                <hr />
-                <button type="submit" style={{ padding: '10px 20px', backgroundColor: 'green', color: 'white' }}>Guardar Cambios</button>
-                <button type="button" onClick={() => navigate(-1)} style={{ marginLeft: '10px' }}>Cancelar</button>
-            </form>
-        </div>);
+                        <div className="d-flex justify-content-end gap-2 mt-4">
+                            <Button variant="light" type="button" onClick={() => navigate(-1)}>
+                                Cancelar
+                            </Button>
+                            <Button type="submit" className="my-btn px-4">
+                                Guardar Cambios
+                            </Button>
+                        </div>
+                    </Form>
+                </Card.Body>
+            </Card>
+        </Container>);
 
 
 }
