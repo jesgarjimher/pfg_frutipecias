@@ -40,7 +40,7 @@ function Home() {
                         </div>
                         <Carousel.Caption className="my-slider-caption">
                             <h2 className="my-slider-title">Frutas Deshidratadas</h2>
-                            <Button as={Link} to="/productos/frutas deshidratadas" className="my-btn px-4 py-2 mt-3">Descubrir</Button>
+                            <Button as={Link} to="/productos/fruta deshidratada" className="my-btn px-4 py-2 mt-3">Descubrir</Button>
                         </Carousel.Caption>
                     </Carousel.Item>
 
