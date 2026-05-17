@@ -1,13 +1,15 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+const INACTIVITY_LIMIT = Number(process.env.REACT_APP_INACTIVITY_LIMIT) || 300000; 
+const SESSION_MAX_LIMIT = Number(process.env.REACT_APP_SESSION_MAX_LIMIT) || 1200000;
+// NACTIVITY_LIMIT_ENV = 5 * 60 * 1000;
+// SESSION_MAX_LIMIT_ENV = 20 * 60 * 1000;
 
 const AutoLogout = ({ children, setUser, user }) => {
   const navigate = useNavigate();
   const timerRef = useRef(null);
   
   
-  const INACTIVITY_LIMIT = 5 * 60 * 1000; 
-  const SESSION_MAX_LIMIT = 20 * 60 * 1000; 
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
@@ -32,7 +34,7 @@ const AutoLogout = ({ children, setUser, user }) => {
     }, SESSION_MAX_LIMIT);
 
     return () => clearTimeout(maxSessionTimer);
-}, [user]); 
+}, [user, handleLogout]); 
 
 useEffect(() => {
     if (!user) return;

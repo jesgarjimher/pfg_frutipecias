@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Form, Label, Pagination } from "react-bootstrap";
+import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Form, Pagination } from "react-bootstrap";
 const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
 
@@ -24,7 +24,7 @@ function Productos() {
         setMostrarModal(true);
     }
     
-    const getProductos = async (pagina = 1) => {
+    const getProductos = useCallback(async (pagina = 1) => {
         setCargando(true);
         try {
             let url = `${API_URL}/api/productos?page=${pagina}`;
@@ -51,7 +51,7 @@ function Productos() {
         }finally {
             setCargando(false);
         }
-    }
+    },[categoria, busqueda]);
 
     useEffect(() => {
         const delayCall = setTimeout(() => {
@@ -59,7 +59,7 @@ function Productos() {
 
         },500)
         return () => clearTimeout(delayCall); //limpa el timeout si se sigue escribiendo
-    }, [categoria, busqueda]);
+    }, [getProductos]);
 
     const botonesPaginacion = [];
 
