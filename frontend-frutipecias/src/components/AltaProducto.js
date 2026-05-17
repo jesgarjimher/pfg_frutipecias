@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 import { Alert, Button, Card, Col, Container, Row, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
 function AltaProducto() {
     const navigate = useNavigate();
@@ -26,8 +27,8 @@ function AltaProducto() {
     useEffect(() => {
         const fetchCategoriasYAlergenos = async () => {
             try {
-                const resCategorias = await axios.get(`http://127.0.0.1:8000/api/categorias`);
-                const resAlergenos = await axios.get(`http://127.0.0.1:8000/api/alergenos`);
+                const resCategorias = await axios.get(`${API_URL}/api/categorias`);
+                const resAlergenos = await axios.get(`${API_URL}/api/alergenos`);
 
                 setCategorias(resCategorias.data);
                 setAlegernos(resAlergenos.data);
@@ -83,7 +84,7 @@ function AltaProducto() {
         formData.append("alergenos", JSON.stringify(producto.alergenos));
 
         try {
-            await axios.post("http://127.0.0.1:8000/api/productos", formData, {
+            await axios.post(`${API_URL}/api/productos`, formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"

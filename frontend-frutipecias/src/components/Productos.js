@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Badge, Button, Card, Col, Container, ListGroup, Modal, Placeholder, Row, Form, Label, Pagination } from "react-bootstrap";
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
 
 function Productos() {
 
     const [productos, setProductos] = useState([]);
     const {categoria} = useParams();
-    const pathStorageImg = "http://127.0.0.1:8000/storage/";
+    const pathStorageImg = `${API_URL}/storage/`;
     const [pagina, setPagina] = useState(1);
     const [paginacion, setPaginacion] = useState({});
     const [busqueda, setBusqueda] = useState("");
@@ -26,7 +27,7 @@ function Productos() {
     const getProductos = async (pagina = 1) => {
         setCargando(true);
         try {
-            let url = `http://127.0.0.1:8000/api/productos?page=${pagina}`;
+            let url = `${API_URL}/api/productos?page=${pagina}`;
 
             if(categoria) {
                 url += `&categoria=${categoria}`;
@@ -104,7 +105,7 @@ function Productos() {
                     productos.map((producto, index) => (
                 <div className="col-12 col-md-6 col-xl-3" key={producto.id}>
                     <Card className="my-card" key={producto.id}>
-                        <Card.Img variant="top" className="card-img-top" src={pathStorageImg + producto.imagen} />
+                        <Card.Img variant="top" className="card-img-top" src={pathStorageImg + producto.imagen} alt={producto.nombre}/>
                         <Card.Body>
                             <Card.Title className="card-title">{producto.nombre}</Card.Title>
                             <Card.Text>
@@ -114,12 +115,7 @@ function Productos() {
                         </Card.Body>
                     </Card> 
                 </div>
-                // <div key={producto.id}>
-                //     <p>{index+1}-{producto.nombre}</p>
-                //     <p>{producto.categoria.nombre}</p>
-                //     <p>{producto.nutriscore}</p>
-                //     <img src={pathStorageImg + producto.imagen} alt={producto.name}></img>
-                // </div>
+                
                 
 
             ))

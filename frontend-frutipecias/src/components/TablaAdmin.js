@@ -2,6 +2,8 @@ import axios from "axios";
 import { Button, Card, Container, Modal, Pagination, Table, Toast, ToastContainer } from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+
 
 
 function TablaAdmin() {
@@ -17,6 +19,7 @@ function TablaAdmin() {
     const [mostrarExitoModal, setMostrarExitoModal] = useState(false);
     const [mostrarToast, setMostrarToast] = useState(false);
     const [msgToast, setMsgToast] = useState("");
+    
 
     for(let pag = 1; pag <= paginacion.last_page; pag++) {
         botonesPaginacion.push(
@@ -26,7 +29,7 @@ function TablaAdmin() {
 
     const getProductos = async (pagina = 1) => {
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/api/productos?page=${pagina}`, {
+            const res = await axios.get(`${API_URL}/api/productos?page=${pagina}`, {
                 headers: {
                     "Accept": "application/json"
                 }
@@ -49,7 +52,7 @@ function TablaAdmin() {
     const deleteProducto = async (id) => {
         const token = localStorage.getItem("token");
                 try {
-                    const res = await axios.delete(`http://127.0.0.1:8000/api/productos/${id}`,
+                    const res = await axios.delete(`${API_URL}/api/productos/${id}`,
                         {headers: {
                             "Authorization": `Bearer ${token}`,
                             "Accept": "application/json"

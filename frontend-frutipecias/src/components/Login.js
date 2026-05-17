@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, Modal, Form } from 'react-bootstrap';
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+
 
 function Login({setUser}) {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -30,11 +32,10 @@ function Login({setUser}) {
         event.preventDefault();
         setError("");
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/login", credentials);
+            const response = await axios.post(`${API_URL}/api/login`, credentials);
             const userData = {...response.data.user, loggedIn: true, role: "admin"};
             const token = response.data.access_token;
             //guardar usuario en LocalStorage
-            // localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("user", JSON.stringify(userData));
             localStorage.setItem("token", token)
             localStorage.setItem("MsgBienvenida", "Bienvenido admin")
@@ -44,8 +45,6 @@ function Login({setUser}) {
             navigate("/tabla-admin");
 
         } catch(error) {
-            console.error("Error en login:", error.response?.data || error.message);
-            console.log("Capturando error en el componente...");
             setError("Email o contrasena incorrectos");
         }
     };

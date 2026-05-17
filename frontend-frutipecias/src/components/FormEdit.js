@@ -2,6 +2,8 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+
 
 function FormEdit() {
     const {id} = useParams();
@@ -35,7 +37,7 @@ function FormEdit() {
     const fetchData = async () => {
         try {
             //producto
-            const res = await axios.get(`http://127.0.0.1:8000/api/productos/${id}`, {
+            const res = await axios.get(`${API_URL}/api/productos/${id}`, {
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json"
@@ -53,11 +55,11 @@ function FormEdit() {
             setProducto(datosProducto);
 
             //categorias
-            const resCategorias = await axios.get(`http://127.0.0.1:8000/api/categorias`);
+            const resCategorias = await axios.get(`${API_URL}/api/categorias`);
             setCategorias(resCategorias.data);
 
             //alergenos
-            const resAlergenos = await axios.get(`http://127.0.0.1:8000/api/alergenos`);
+            const resAlergenos = await axios.get(`${API_URL}/api/alergenos`);
             setAlergenos(resAlergenos.data);
 
         } catch(error) {
@@ -122,7 +124,7 @@ function FormEdit() {
         formData.append("alergenos", JSON.stringify(producto.alergenos));
 
         try {
-            await axios.post(`http://127.0.0.1:8000/api/productos/${id}`, formData, {
+            await axios.post(`${API_URL}/api/productos/${id}`, formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
@@ -207,7 +209,7 @@ function FormEdit() {
                                         {nuevaImagen ? (
                                             <img src={URL.createObjectURL(nuevaImagen)} alt="Vista previa" className="img-preview" />
                                         ) : producto.imagen ? (
-                                            <img src={`http://127.0.0.1:8000/storage/${producto.imagen}`} alt="Imagen actual" className="img-preview" />
+                                            <img src={`${API_URL}/storage/${producto.imagen}`} alt="Imagen actual" className="img-preview" />
                                         ) : (
                                             <span className="text-muted small text-center px-1">Sin imagen</span>
                                         )}
