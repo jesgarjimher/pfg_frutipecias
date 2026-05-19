@@ -161,9 +161,7 @@ class ProductoController extends Controller
                 return response()->json([
                     'message' => 'Error al actualizar',
                     'error' => $e->getMessage()
-                ], 500)
-                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-                ->header('Access-Control-Allow-Methods', 'PUT, POST, GET, OPTIONS, DELETE');
+                ], 500);
             }
     }
 
