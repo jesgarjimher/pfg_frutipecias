@@ -128,7 +128,7 @@ function AltaProducto() {
                             <Col md={8}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Nombre del Producto:</Form.Label>
-                                    <Form.Control name="nombre" type="text" maxLength="100" placeholder="Ej: nueces" onChange={handleChange} />
+                                    <Form.Control name="nombre" type="text" maxLength="100" placeholder="Ej: nueces" onChange={handleChange} required/>
                                 </Form.Group>
                             </Col>
                             <Col md={8}>
@@ -184,31 +184,31 @@ function AltaProducto() {
                         <Row className="g-3">
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Energía (kcal)</Form.Label>
-                                <Form.Control type="number" name="informacion_nutricional.energia" placeholder="0" onChange={handleChange} required />
+                                <Form.Control type="number" name="informacion_nutricional.energia" min="0" placeholder="0" onChange={handleChange} required />
                             </Col>
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Grasas (g)</Form.Label>
-                                <Form.Control type="number" step="0.1" name="informacion_nutricional.grasas" placeholder="0.0" onChange={handleChange} required />
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.grasas" min="0" placeholder="0.0" onChange={handleChange} required />
                             </Col>
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Grasas Sat. (g)</Form.Label>
-                                <Form.Control type="number" step="0.1" name="informacion_nutricional.grasas_saturadas" placeholder="0.0" onChange={handleChange} required />
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.grasas_saturadas" min="0" placeholder="0.0" onChange={handleChange} required />
                             </Col>
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Carbohidratos (g)</Form.Label>
-                                <Form.Control type="number" step="0.1" name="informacion_nutricional.carbohidratos" placeholder="0.0" onChange={handleChange} required />
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.carbohidratos" min="0" placeholder="0.0" onChange={handleChange} required />
                             </Col>
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Azúcares (g)</Form.Label>
-                                <Form.Control type="number" step="0.1" name="informacion_nutricional.azucares" placeholder="0.0" onChange={handleChange} required />
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.azucares" min="0" placeholder="0.0" onChange={handleChange} required />
                             </Col>
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Proteínas (g)</Form.Label>
-                                <Form.Control type="number" step="0.1" name="informacion_nutricional.proteinas" placeholder="0.0" onChange={handleChange} required />
+                                <Form.Control type="number" step="0.1" name="informacion_nutricional.proteinas" min="0" placeholder="0.0" onChange={handleChange} required />
                             </Col>
                             <Col xs={6} md={3}>
                                 <Form.Label className="small">Sal (g)</Form.Label>
-                                <Form.Control type="number" step="0.01" name="informacion_nutricional.sal" placeholder="0.00" onChange={handleChange} required />
+                                <Form.Control type="number" step="0.01" name="informacion_nutricional.sal" min="0" placeholder="0.00" onChange={handleChange} required />
                             </Col>
                         </Row>
 

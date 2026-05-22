@@ -167,7 +167,7 @@ function FormEdit() {
                             <Col md={8}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Nombre:</Form.Label>
-                                    <Form.Control name="nombre" type="text" maxLength="100" value={producto.nombre} onChange={handleChange} />
+                                    <Form.Control name="nombre" type="text" maxLength="100" value={producto.nombre} onChange={handleChange} required/>
                                 </Form.Group>
                             </Col>
                             <Col md={8}>
